@@ -471,6 +471,7 @@ fn transaction_proof() {
         .transact(
             &transaction,
             TransactOptions::with_no_tracing().dont_check_nonce(),
+            false,
         )
         .unwrap();
 

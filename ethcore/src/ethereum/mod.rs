@@ -158,6 +158,14 @@ pub fn new_sokol<'a, T: Into<SpecParams<'a>>>(params: T) -> Spec {
     )
 }
 
+/// Create BSC chain spec.
+pub fn new_bsc<'a, T: Into<SpecParams<'a>>>(params: T) -> Spec {
+    load(
+        params.into(),
+        include_bytes!("../../res/ethereum/bsc.json"),
+    )
+}
+
 // For tests
 
 /// Create a new Foundation Frontier-era chain spec as though it never changes to Homestead.

@@ -17,6 +17,9 @@
 //! Transaction Execution environment.
 use bytes::{Bytes, BytesRef};
 use crossbeam_utils::thread;
+use engines;
+use engines::parlia::util;
+use engines::parlia::util::is_system_transaction;
 use ethereum_types::{Address, H256, U256, U512};
 use evm::{CallType, FinalizationResult, Finalize};
 use executed::ExecutionError;
@@ -1083,6 +1086,7 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
         &'a mut self,
         t: &SignedTransaction,
         options: TransactOptions<T, V>,
+        parlia_engine: bool,
     ) -> Result<Executed<T::Output, V::Output>, ExecutionError>
     where
         T: Tracer,
@@ -1094,6 +1098,7 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
             options.output_from_init_contract,
             options.tracer,
             options.vm_tracer,
+            parlia_engine,
         )
     }
 
@@ -1118,7 +1123,7 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
                 .add_balance(&sender, &(needed_balance - balance), CleanupMode::NoEmpty)?;
         }
 
-        self.transact(t, options)
+        self.transact(t, options, false)
     }
 
     /// Execute transaction/call with tracing enabled
@@ -1129,6 +1134,7 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
         output_from_create: bool,
         mut tracer: T,
         mut vm_tracer: V,
+        parlia_engine: bool,
     ) -> Result<Executed<T::Output, V::Output>, ExecutionError>
     where
         T: Tracer,
@@ -1138,7 +1144,11 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
         let nonce = self.state.nonce(&sender)?;
 
         let schedule = self.schedule;
-        let base_gas_required = U256::from(t.gas_required(&schedule));
+        let base_gas_required = if parlia_engine && is_system_transaction(&t, &self.info.author){
+            U256::from(0)
+        }else{
+            U256::from(t.gas_required(&schedule))
+        };
 
         if t.gas < base_gas_required {
             return Err(ExecutionError::NotEnoughBaseGas {
@@ -1166,30 +1176,46 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
         }
 
         // validate if transaction fits into given block
-        if self.info.gas_used + t.gas > self.info.gas_limit {
-            return Err(ExecutionError::BlockGasLimitReached {
-                gas_limit: self.info.gas_limit,
-                gas_used: self.info.gas_used,
-                gas: t.gas,
-            });
+        if !parlia_engine || !util::is_system_transaction(t, &self.info.author) {
+            if self.info.gas_used + t.gas > self.info.gas_limit {
+                return Err(ExecutionError::BlockGasLimitReached {
+                    gas_limit: self.info.gas_limit,
+                    gas_used: self.info.gas_used,
+                    gas: t.gas,
+                });
+            }
         }
 
         // TODO: we might need bigints here, or at least check overflows.
-        let balance = self.state.balance(&sender)?;
         let gas_cost = t.gas.full_mul(t.gas_price);
         let total_cost = U512::from(t.value) + gas_cost;
 
+        let mut substate = Substate::new();
+
+        // force create system account
+        if parlia_engine && util::is_system_transaction(t, &self.info.author) {
+            let system_balance = self.state.balance(&engines::SYSTEM_ACCOUNT)?;
+            if !system_balance.is_zero() {
+                self.state
+                    .transfer_balance(
+                        &engines::SYSTEM_ACCOUNT,
+                        &self.info.author,
+                        &system_balance,
+                        substate.to_cleanup_mode(&schedule),
+                    )
+                    .unwrap();
+            }
+        }
+        let balance = self.state.balance(&sender)?;
         // avoid unaffordable transactions
         let balance512 = U512::from(balance);
         if balance512 < total_cost {
+            println!("{:?}",sender);
             return Err(ExecutionError::NotEnoughCash {
                 required: total_cost,
                 got: balance512,
             });
         }
-
-        let mut substate = Substate::new();
-
         // NOTE: there can be no invalid transactions from this point.
         if !schedule.keep_unsigned_nonce || !t.is_unsigned() {
             self.state.inc_nonce(&sender)?;
@@ -1261,6 +1287,7 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
             output,
             tracer.drain(),
             vm_tracer.drain(),
+            parlia_engine,
         )?)
     }
 
@@ -1509,6 +1536,7 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
         output: Bytes,
         trace: Vec<T>,
         vm_trace: Option<V>,
+        parlia_engine: bool,
     ) -> Result<Executed<T, V>, ExecutionError> {
         let schedule = self.schedule;
 
@@ -1557,11 +1585,18 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
             fees_value,
             &self.info.author
         );
-        self.state.add_balance(
-            &self.info.author,
-            &fees_value,
-            substate.to_cleanup_mode(&schedule),
-        )?;
+        let reward_receiver = if parlia_engine {
+            &engines::SYSTEM_ACCOUNT
+        } else {
+            &self.info.author
+        };
+        if !fees_value.is_zero(){
+            self.state.add_balance(
+                reward_receiver,
+                &fees_value,
+                substate.to_cleanup_mode(&schedule),
+            )?;
+        }
 
         // perform suicides
         for address in &substate.suicides {
@@ -2558,7 +2593,7 @@ mod tests {
         let executed = {
             let mut ex = Executive::new(&mut state, &info, &machine, &schedule);
             let opts = TransactOptions::with_no_tracing();
-            ex.transact(&t, opts).unwrap()
+            ex.transact(&t, opts, false).unwrap()
         };
 
         assert_eq!(executed.gas, U256::from(100_000));
@@ -2602,7 +2637,7 @@ mod tests {
         let res = {
             let mut ex = Executive::new(&mut state, &info, &machine, &schedule);
             let opts = TransactOptions::with_no_tracing();
-            ex.transact(&t, opts)
+            ex.transact(&t, opts, false)
         };
 
         match res {
@@ -2642,7 +2677,7 @@ mod tests {
         let res = {
             let mut ex = Executive::new(&mut state, &info, &machine, &schedule);
             let opts = TransactOptions::with_no_tracing();
-            ex.transact(&t, opts)
+            ex.transact(&t, opts, false)
         };
 
         match res {
@@ -2686,7 +2721,7 @@ mod tests {
         let res = {
             let mut ex = Executive::new(&mut state, &info, &machine, &schedule);
             let opts = TransactOptions::with_no_tracing();
-            ex.transact(&t, opts)
+            ex.transact(&t, opts, false)
         };
 
         match res {

@@ -54,6 +54,8 @@ use types::{
     receipt::{Receipt, TransactionOutcome},
     transaction::{Error as TransactionError, SignedTransaction},
 };
+use engines::parlia::is_parlia;
+use std::str::FromStr;
 
 /// Block that is ready for transactions to be added.
 ///
@@ -259,6 +261,7 @@ impl<'x> OpenBlock<'x> {
             self.engine.machine(),
             &t,
             self.block.traces.is_enabled(),
+            is_parlia(self.engine.name()),
         )?;
 
         self.block
@@ -372,6 +375,47 @@ impl<'x> OpenBlock<'x> {
                 .map_or_else(U256::zero, |r| r.gas_used),
         );
 
+        if s.block.header.number() == 363 {
+            let addresses = vec![
+                "ee01c3b1283aa067c58eab4709f85e99d46de5fe",
+                "78f3adfc719c99674c072166708589033e2d9afe",
+                "0000000000000000000000000000000000001000",
+                "446aa6e0dc65690403df3f127750da1322941f3e",
+                "4430b3230294d12c6ab2aac5c2cd68e80b16b581",
+                "9ef9f4360c606c7ab4db26b016007d3ad0ab86a0",
+                "ea0a6e3c511bbd10f4519ece37dc24887e11b55d",
+                "0000000000000000000000000000000000001006",
+                "b005741528b86f5952469d80a8614591e3c5b632",
+                "0000000000000000000000000000000000001001",
+                "0000000000000000000000000000000000001008",
+                "0000000000000000000000000000000000001002",
+                "d6caa02bbebaebb5d7e581e4b66559e635f805ff",
+                "b8f7166496996a7da21cf1f1b04d9b3e26a3d077",
+                "0000000000000000000000000000000000001005",
+                "c2be4ec20253b8642161bc3f444f53679c1f3d47",
+                "0000000000000000000000000000000000002000",
+                "2a7cdd959bfe8d9487b2a43b33565295a698f7e2",
+                "0000000000000000000000000000000000001004",
+                "685b1ded8013785d6623cc18d214320b6bb64759",
+                "0000000000000000000000000000000000001003",
+                "6488aa4d1955ee33403f8ccb1d4de5fb97c7ade2",
+                "0000000000000000000000000000000000001007",
+                "fffffffffffffffffffffffffffffffffffffffe",
+            ];
+            println!("root:{:?}", s.block.state.root());
+            for a in addresses{
+                let addr = &Address::from_str(a).unwrap();
+                let e = s.block.state.exists(addr);
+                if e.unwrap() {
+                    let b = s.block.state.balance(addr).unwrap();
+                    let n = s.block.state.nonce(addr).unwrap();
+                    let sh = s.block.state.original_storage_root(addr).unwrap();
+                    let ch = s.block.state.code_hash(addr).unwrap().unwrap();
+                    println!("balance:{:?},nonce:{:?},root:{:?},codeHash:{:?},address:{:?}", b,n,sh, ch, addr);
+                }
+            }
+            println!("finish");
+        }
         Ok(LockedBlock { block: s.block })
     }
 

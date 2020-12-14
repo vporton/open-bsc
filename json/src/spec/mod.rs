@@ -27,6 +27,7 @@ pub mod genesis;
 pub mod instant_seal;
 pub mod null_engine;
 pub mod params;
+pub mod parlia;
 pub mod seal;
 pub mod spec;
 pub mod state;
@@ -38,6 +39,7 @@ pub use self::{
     basic_authority::{BasicAuthority, BasicAuthorityParams},
     builtin::{Builtin, Linear, Pricing},
     clique::{Clique, CliqueParams},
+    parlia::{Parlia,ParliaParams},
     engine::Engine,
     ethash::{BlockReward, Ethash, EthashParams},
     genesis::Genesis,

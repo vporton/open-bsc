@@ -306,6 +306,10 @@ impl Header {
         keccak(self.rlp(Seal::Without))
     }
 
+    pub fn hash_with_id(&self, chain_id: &u64) -> H256 {
+        return keccak(self.rlp_with_id(chain_id, Seal::With));
+    }
+
     /// Encode the header, getting a type-safe wrapper around the RLP.
     pub fn encoded(&self) -> ::encoded::Header {
         ::encoded::Header::new(self.rlp(Seal::With))
@@ -318,6 +322,13 @@ impl Header {
         s.out()
     }
 
+    /// Get the RLP representation of this Header.
+    fn rlp_with_id(&self, chain_id: &u64, with_seal: Seal) -> Bytes {
+        let mut s = RlpStream::new();
+        self.stream_rlp_with_id(&mut s, chain_id, with_seal);
+        s.out()
+    }
+
     /// Place this header into an RLP stream `s`, optionally `with_seal`.
     fn stream_rlp(&self, s: &mut RlpStream, with_seal: Seal) {
         if let Seal::With = with_seal {
@@ -326,6 +337,36 @@ impl Header {
             s.begin_list(13);
         }
 
+        s.append(&self.parent_hash);
+        s.append(&self.uncles_hash);
+        s.append(&self.author);
+        s.append(&self.state_root);
+        s.append(&self.transactions_root);
+        s.append(&self.receipts_root);
+        s.append(&self.log_bloom);
+        s.append(&self.difficulty);
+        s.append(&self.number);
+        s.append(&self.gas_limit);
+        s.append(&self.gas_used);
+        s.append(&self.timestamp);
+        s.append(&self.extra_data);
+
+        if let Seal::With = with_seal {
+            for b in &self.seal {
+                s.append_raw(b, 1);
+            }
+        }
+    }
+
+    /// Place this header into an RLP stream `s`, optionally `with_seal`.
+    fn stream_rlp_with_id(&self, s: &mut RlpStream, chain_id: &u64, with_seal: Seal) {
+        if let Seal::With = with_seal {
+            s.begin_list(14 + self.seal.len());
+        } else {
+            s.begin_list(14);
+        }
+
+        s.append(chain_id);
         s.append(&self.parent_hash);
         s.append(&self.uncles_hash);
         s.append(&self.author);

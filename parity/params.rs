@@ -52,6 +52,7 @@ pub enum SpecType {
     Goerli,
     Sokol,
     Dev,
+    Bscmain,
     Custom(String),
 }
 
@@ -79,6 +80,7 @@ impl str::FromStr for SpecType {
             "ropsten" => SpecType::Ropsten,
             "kovan" => SpecType::Kovan,
             "rinkeby" => SpecType::Rinkeby,
+            "bsc" => SpecType::Bscmain,
             "goerli" | "görli" | "testnet" => SpecType::Goerli,
             "sokol" | "poasokol" => SpecType::Sokol,
             "dev" => SpecType::Dev,
@@ -107,6 +109,7 @@ impl fmt::Display for SpecType {
             SpecType::Goerli => "goerli",
             SpecType::Sokol => "sokol",
             SpecType::Dev => "dev",
+            SpecType::Bscmain => "bsc",
             SpecType::Custom(ref custom) => custom,
         })
     }
@@ -131,6 +134,7 @@ impl SpecType {
             SpecType::Rinkeby => Ok(ethereum::new_rinkeby(params)),
             SpecType::Goerli => Ok(ethereum::new_goerli(params)),
             SpecType::Sokol => Ok(ethereum::new_sokol(params)),
+            SpecType:: Bscmain => Ok(ethereum::new_bsc(params)),
             SpecType::Dev => Ok(Spec::new_instant()),
             SpecType::Custom(ref filename) => {
                 let file = fs::File::open(filename).map_err(|e| {
@@ -352,7 +356,7 @@ pub fn fatdb_switch_to_bool(
     _algorithm: Algorithm,
 ) -> Result<bool, String> {
     let result = match (user_defaults.is_first_launch, switch, user_defaults.fat_db) {
-        (false, Switch::On, false) => Err("FatDB resync required".into()),
+        (false, Switch::On, false) => Ok(true),
         (_, Switch::On, _) => Ok(true),
         (_, Switch::Off, _) => Ok(false),
         (_, Switch::Auto, def) => Ok(def),

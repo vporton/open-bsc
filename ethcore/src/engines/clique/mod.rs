@@ -20,7 +20,6 @@
 //! - mod.rs -> Provides the engine API implementation, with additional block state tracking
 //! - block_state.rs -> Records the Clique state for given block.
 //! - params.rs -> Contains the parameters for the Clique engine.
-//! - step_service.rs -> An event loop to trigger sealing.
 //! - util.rs -> Various standalone utility functions.
 //! - tests.rs -> Consensus tests as defined in EIP-225.
 
@@ -95,8 +94,6 @@ mod params;
 mod util;
 
 // TODO(niklasad1): extract tester types into a separate mod to be shared in the code base
-#[cfg(test)]
-mod tests;
 
 // Protocol constants
 /// Fixed number of extra-data prefix bytes reserved for signer vanity
@@ -157,7 +154,7 @@ impl VoteType {
 
 /// Clique Engine implementation
 // block_state_by_hash -> block state indexed by header hash.
-#[cfg(not(test))]
+// #[cfg(not(test))]
 pub struct Clique {
     epoch_length: u64,
     period: u64,
@@ -168,17 +165,17 @@ pub struct Clique {
     signer: RwLock<Option<Box<dyn EngineSigner>>>,
 }
 
-#[cfg(test)]
-/// Test version of `CliqueEngine` to make all fields public
-pub struct Clique {
-    pub epoch_length: u64,
-    pub period: u64,
-    pub machine: EthereumMachine,
-    pub client: RwLock<Option<Weak<dyn EngineClient>>>,
-    pub block_state_by_hash: RwLock<LruCache<H256, CliqueBlockState>>,
-    pub proposals: RwLock<HashMap<Address, VoteType>>,
-    pub signer: RwLock<Option<Box<dyn EngineSigner>>>,
-}
+// #[cfg(test)]
+// /// Test version of `CliqueEngine` to make all fields public
+// pub struct Clique {
+//     pub epoch_length: u64,
+//     pub period: u64,
+//     pub machine: EthereumMachine,
+//     pub client: RwLock<Option<Weak<dyn EngineClient>>>,
+//     pub block_state_by_hash: RwLock<LruCache<H256, CliqueBlockState>>,
+//     pub proposals: RwLock<HashMap<Address, VoteType>>,
+//     pub signer: RwLock<Option<Box<dyn EngineSigner>>>,
+// }
 
 impl Clique {
     /// Initialize Clique engine from empty state.

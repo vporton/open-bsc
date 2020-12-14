@@ -982,6 +982,7 @@ dependencies = [
  "globset",
  "hash-db",
  "heapsize",
+ "hex",
  "hex-literal",
  "itertools 0.5.10",
  "journaldb",
@@ -1849,6 +1850,12 @@ checksum = "307c3c9f937f38e3534b1d6447ecf090cafcc9744e4a6360e8b037b2cf5af120"
 dependencies = [
  "libc",
 ]
+
+[[package]]
+name = "hex"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "805026a5d0141ffc30abb3be3173848ad46a1b1664fe632428479619a3644d77"
 
 [[package]]
 name = "hex-literal"

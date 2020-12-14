@@ -99,6 +99,7 @@ use vm::Schedule;
 // re-export
 pub use blockchain::CacheSize as BlockChainCacheSize;
 use db::{keys::BlockDetails, Readable, Writable};
+use engines::parlia::is_parlia;
 pub use types::{block_status::BlockStatus, blockchain_info::BlockChainInfo};
 pub use verification::QueueInfo as BlockQueueInfo;
 
@@ -410,8 +411,12 @@ impl Importer {
 
         // Check if parent is in chain
         let parent = match client.block_header_decoded(BlockId::Hash(*header.parent_hash())) {
-            Some(h) => h,
+            Some(h) => {
+                println!("{}",header.number()-1);
+                h
+            },
             None => {
+                println!("{}",header.number()-1);
                 warn!(target: "client", "Block import failed for #{} ({}): Parent not found ({}) ", header.number(), header.hash(), header.parent_hash());
                 bail!("Parent not found");
             }
@@ -471,6 +476,7 @@ impl Importer {
                 bail!(e);
             }
         };
+
 
         // Strip receipts for blocks before validate_receipts_transition,
         // if the expected receipts root header does not match.
@@ -738,7 +744,7 @@ impl Importer {
                             let machine = self.engine.machine();
                             let schedule = machine.schedule(env_info.number);
                             let res = Executive::new(&mut state, &env_info, &machine, &schedule)
-                                .transact(&transaction, options);
+                                .transact(&transaction, options, is_parlia(self.engine.name()));
 
                             let res = match res {
                                 Err(e) => {

@@ -49,6 +49,7 @@ use spec::{seal::Generic as GenericSeal, Genesis};
 use state::{backend::Basic as BasicBackend, Backend, State, Substate};
 use trace::{NoopTracer, NoopVMTracer};
 
+use engines::parlia::Parlia;
 pub use ethash::OptimizeFor;
 
 const MAX_TRANSACTION_SIZE: usize = 300 * 1024;
@@ -645,7 +646,7 @@ impl Spec {
         if params.network_id == 0x4 {
             hard_forks.insert(1);
         }
-
+        let chain_id = params.chain_id.clone();
         let machine = Self::machine(&engine_spec, params, builtins);
 
         let engine: Arc<dyn EthEngine> = match engine_spec {
@@ -691,6 +692,10 @@ impl Spec {
             ethjson::spec::Engine::AuthorityRound(authority_round) => {
                 AuthorityRound::new(authority_round.params.into(), machine)
                     .expect("Failed to start AuthorityRound consensus engine.")
+            }
+            ethjson::spec::Engine::Parlia(parlia) => {
+                Parlia::new(parlia.params.into(), machine, chain_id)
+                    .expect("Failed to start parlia consensus engine.")
             }
         };
 
