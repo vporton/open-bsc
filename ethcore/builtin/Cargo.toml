@@ -12,6 +12,7 @@ eip-152 = { path = "../../util/EIP-152" }
 ethereum-types = "0.4"
 ethjson = { path = "../../json" }
 ethkey = { path = "../../accounts/ethkey" }
+tendermint = {path = "../tendermint"}
 keccak-hash = "0.1.0"
 log = "0.4"
 macros = { path = "../../util/macros" }

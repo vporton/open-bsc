@@ -21,6 +21,8 @@ ethash = { path = "../ethash" }
 ethcore-blockchain = { path = "./blockchain" }
 ethcore-bloom-journal = { path = "../util/bloom" }
 ethcore-builtin = { path = "./builtin" }
+tendermint = { path = "./tendermint" }
+tendermint-proto = {path = "./proto"}
 ethcore-call-contract = { path = "./call-contract" }
 ethcore-db = { path = "./db" }
 ethcore-io = { path = "../util/io" }

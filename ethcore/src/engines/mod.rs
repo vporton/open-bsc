@@ -15,7 +15,7 @@
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Consensus engine specification and basic implementations.
-#![warn(missing_docs)]
+#![allow(missing_docs)]
 mod authority_round;
 mod basic_authority;
 mod clique;

@@ -1210,7 +1210,6 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
         // avoid unaffordable transactions
         let balance512 = U512::from(balance);
         if balance512 < total_cost {
-            println!("{:?}",sender);
             return Err(ExecutionError::NotEnoughCash {
                 required: total_cost,
                 got: balance512,

@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
-#![warn(missing_docs, unused_extern_crates)]
-
+#![warn(unused_extern_crates)]
+#![allow(missing_docs)]
 //! Ethcore library
 
 extern crate ansi_term;

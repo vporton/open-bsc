@@ -41,6 +41,7 @@ use log::{trace, warn};
 use num::{BigUint, One, Zero};
 use parity_bytes::BytesRef;
 use parity_crypto::digest;
+use tendermint::lite::{iavl_proof, light_client};
 
 /// Native implementation of a built-in contract.
 pub trait Implementation: Send + Sync {
@@ -607,6 +608,10 @@ enum EthereumBuiltin {
     Bls12MapFpToG1(Bls12MapFpToG1),
     /// bls12_381 fp2 to g2 mapping
     Bls12MapFp2ToG2(Bls12MapFp2ToG2),
+    /// tendermint_header_verify mapping
+    TendermintHeaderVerify(TendermintHeaderVerify),
+    /// iavl_proof_verify mapping
+    IavlProofVerify(IavlProofVerify),
 }
 
 impl FromStr for EthereumBuiltin {
@@ -632,6 +637,10 @@ impl FromStr for EthereumBuiltin {
             "bls12_381_pairing" => Ok(EthereumBuiltin::Bls12Pairing(Bls12Pairing)),
             "bls12_381_fp_to_g1" => Ok(EthereumBuiltin::Bls12MapFpToG1(Bls12MapFpToG1)),
             "bls12_381_fp2_to_g2" => Ok(EthereumBuiltin::Bls12MapFp2ToG2(Bls12MapFp2ToG2)),
+            "tendermint_header_verify" => Ok(EthereumBuiltin::TendermintHeaderVerify(
+                TendermintHeaderVerify,
+            )),
+            "iavl_proof_verify" => Ok(EthereumBuiltin::IavlProofVerify(IavlProofVerify)),
             _ => return Err(format!("invalid builtin name: {}", name)),
         }
     }
@@ -658,6 +667,8 @@ impl Implementation for EthereumBuiltin {
             EthereumBuiltin::Bls12Pairing(inner) => inner.execute(input, output),
             EthereumBuiltin::Bls12MapFpToG1(inner) => inner.execute(input, output),
             EthereumBuiltin::Bls12MapFp2ToG2(inner) => inner.execute(input, output),
+            EthereumBuiltin::TendermintHeaderVerify(inner) => inner.execute(input, output),
+            EthereumBuiltin::IavlProofVerify(inner) => inner.execute(input, output),
         }
     }
 }
@@ -724,6 +735,14 @@ pub struct Bls12MapFpToG1;
 #[derive(Debug)]
 /// The Bls12MapFp2ToG2 builtin.
 pub struct Bls12MapFp2ToG2;
+
+#[derive(Debug)]
+/// The TendermintHeaderVerify builtin.
+pub struct TendermintHeaderVerify;
+
+#[derive(Debug)]
+/// The IavlProofVerify builtin.
+pub struct IavlProofVerify;
 
 impl Implementation for Identity {
     fn execute(&self, input: &[u8], output: &mut BytesRef) -> Result<(), &'static str> {
@@ -1113,6 +1132,19 @@ impl Implementation for Bls12MapFp2ToG2 {
                 Err("Bls12MapFp2ToG2 error")
             }
         }
+    }
+}
+
+impl Implementation for TendermintHeaderVerify {
+    fn execute(&self, input: &[u8], output: &mut BytesRef) -> Result<(), &'static str> {
+        let res = light_client::TmHeaderVerifier::execute(input, output);
+        res
+    }
+}
+
+impl Implementation for IavlProofVerify {
+    fn execute(&self, input: &[u8], output: &mut BytesRef) -> Result<(), &'static str> {
+        iavl_proof::execute(input, output)
     }
 }
 

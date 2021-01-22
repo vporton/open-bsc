@@ -15,18 +15,13 @@
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Implementation of the Parlia POSA Engine.
-
-#![warn(missing_docs)]
-
+#![allow(missing_docs)]
 mod params;
 mod snapshot;
-#[cfg(test)]
-mod tests;
 pub mod util;
 
 use block::ExecutedBlock;
 use client::{BlockId, EngineClient};
-use engines;
 use engines::parlia::params::ParliaParams;
 use engines::parlia::snapshot::Snapshot;
 use engines::parlia::util::{is_system_transaction, recover_creator};
@@ -39,10 +34,8 @@ use kvdb::KeyValueDB;
 use lru_cache::LruCache;
 use machine::{Call, EthereumMachine};
 use parking_lot::RwLock;
-use state::CleanupMode;
 use std::collections::BTreeSet;
 use std::ops::{Add, Mul};
-use std::str::FromStr;
 use std::sync::{Arc, Weak};
 use std::time::{Duration, SystemTime};
 use types::header::{ExtendedHeader, Header};
@@ -143,13 +136,11 @@ impl Parlia {
                             }
                         }
                     }
-                    println!("{:?}", block_hash);
                     if let Some(header) = c.block_header(BlockId::Hash(block_hash)) {
                         headers.push(header.decode()?);
                         block_number -= 1;
                         block_hash = header.parent_hash();
                     } else {
-                        println!("{:?}", block_hash);
                         Err(EngineError::ParliaUnContinuousHeader)?
                     }
                 }
@@ -277,16 +268,7 @@ impl Engine<EthereumMachine> for Parlia {
                 data: validator_dis_data,
             };
             expect_system_txs.push(validator_dis_tx);
-            // _block.state.kill_account(&engines::SYSTEM_ACCOUNT);
         }
-        // else if _block.header.number() == 1 {
-        //     // force create
-        //     _block.state.add_balance(
-        //         &engines::SYSTEM_ACCOUNT,
-        //         &U256::from(0),
-        //         CleanupMode::ForceCreate,
-        //     );
-        // }
 
         for tx in txs {
             if is_system_transaction(tx, header.author()) {
