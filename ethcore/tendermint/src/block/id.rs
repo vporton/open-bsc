@@ -4,16 +4,18 @@ use crate::{
     hash::{Algorithm, Hash},
 };
 use serde::{Deserialize, Serialize};
-use std::convert::{TryFrom, TryInto};
 use std::{
+    convert::{TryFrom, TryInto},
     fmt::{self, Display},
     str::{self, FromStr},
 };
-use tendermint_proto::types::{
-    BlockId as RawBlockId, CanonicalBlockId as RawCanonicalBlockId,
-    PartSetHeader as RawPartSetHeader,
+use tendermint_proto::{
+    types::{
+        BlockId as RawBlockId, CanonicalBlockId as RawCanonicalBlockId,
+        PartSetHeader as RawPartSetHeader,
+    },
+    Protobuf,
 };
-use tendermint_proto::Protobuf;
 
 /// Length of a block ID prefix displayed for debugging purposes
 pub const PREFIX_LENGTH: usize = 10;

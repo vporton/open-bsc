@@ -1,11 +1,10 @@
 //! Validator private keys
 
-use crate::public_key::TendermintKey;
 use crate::{
     account,
     error::{Error, Kind},
     private_key::PrivateKey,
-    public_key::PublicKey,
+    public_key::{PublicKey, TendermintKey},
 };
 use anomaly::format_err;
 use serde::{Deserialize, Serialize};

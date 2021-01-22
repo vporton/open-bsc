@@ -1,24 +1,23 @@
 //! Iavl proofs
-use crate::hash::SHA256_HASH_SIZE;
-use crate::merkle::{simple_hash_from_byte_vectors, Hash};
-use crate::serializers;
-use crate::Error;
+use crate::{
+    hash::SHA256_HASH_SIZE,
+    merkle::{simple_hash_from_byte_vectors, Hash},
+    serializers, Error,
+};
 use bstr::ByteSlice;
 use byteorder::{BigEndian, ReadBytesExt};
 use parity_bytes::BytesRef;
-use prost_amino::encoding::encode_varint;
-use prost_amino::Message as _;
+use prost_amino::{encoding::encode_varint, Message as _};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
-use std::cmp::Ordering::Equal;
-use std::convert::TryFrom;
-use std::io::Cursor;
-use tendermint_proto::crypto::{
-    IavlValueProofOp, MultiStoreProof, MultiStoreProofOp, PathToLeaf, ProofInnerNode,
-    ProofLeafNode, ProofOp as RawProofOp, StoreInfo,
+use std::{cmp::Ordering::Equal, convert::TryFrom, io::Cursor};
+use tendermint_proto::{
+    crypto::{
+        IavlValueProofOp, MultiStoreProof, MultiStoreProofOp, PathToLeaf, ProofInnerNode,
+        ProofLeafNode, ProofOp as RawProofOp, ProofOps as RawProofOps, RangeProof, StoreInfo,
+    },
+    Protobuf,
 };
-use tendermint_proto::crypto::{ProofOps as RawProofOps, RangeProof};
-use tendermint_proto::Protobuf;
 
 const PRECOMPILE_CONTRACT_INPUT_METADATA_LENGTH: usize = 32;
 const MERKLE_PROOF_VALIDATE_RESULT_LENGTH: usize = 32;
@@ -469,8 +468,7 @@ pub fn execute(input: &[u8], output: &mut BytesRef) -> Result<(), &'static str> 
 
 #[cfg(test)]
 mod test {
-    use super::execute;
-    use super::Proof;
+    use super::{execute, Proof};
     use crate::test::test_serialization_roundtrip;
     use hex;
     use parity_bytes::BytesRef;

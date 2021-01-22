@@ -411,9 +411,7 @@ impl Importer {
 
         // Check if parent is in chain
         let parent = match client.block_header_decoded(BlockId::Hash(*header.parent_hash())) {
-            Some(h) => {
-                h
-            },
+            Some(h) => h,
             None => {
                 warn!(target: "client", "Block import failed for #{} ({}): Parent not found ({}) ", header.number(), header.hash(), header.parent_hash());
                 bail!("Parent not found");
@@ -474,7 +472,6 @@ impl Importer {
                 bail!(e);
             }
         };
-
 
         // Strip receipts for blocks before validate_receipts_transition,
         // if the expected receipts root header does not match.

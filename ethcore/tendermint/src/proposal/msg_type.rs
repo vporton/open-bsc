@@ -1,6 +1,5 @@
 use crate::{Error, Kind};
-use serde::de::Error as _;
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use serde::{de::Error as _, Deserialize, Deserializer, Serialize, Serializer};
 use std::convert::TryFrom;
 use tendermint_proto::Protobuf;
 

@@ -24,8 +24,7 @@ pub use self::{
 use crate::{abci::transaction, evidence, Error, Kind};
 use serde::{Deserialize, Serialize};
 use std::convert::{TryFrom, TryInto};
-use tendermint_proto::types::Block as RawBlock;
-use tendermint_proto::Protobuf;
+use tendermint_proto::{types::Block as RawBlock, Protobuf};
 
 /// Blocks consist of a header, transactions, votes (the commit), and a list of
 /// evidence of malfeasance (i.e. signing conflicting votes).

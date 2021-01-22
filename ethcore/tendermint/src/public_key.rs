@@ -16,12 +16,12 @@ use crate::{
 use anomaly::{fail, format_err};
 use serde::{de, ser, Deserialize, Serialize};
 use signature::Verifier as _;
-use std::convert::TryFrom;
-use std::{cmp::Ordering, fmt, ops::Deref, str::FromStr};
+use std::{cmp::Ordering, convert::TryFrom, fmt, ops::Deref, str::FromStr};
 use subtle_encoding::{base64, bech32, hex};
-use tendermint_proto::crypto::public_key::Sum;
-use tendermint_proto::crypto::PublicKey as RawPublicKey;
-use tendermint_proto::Protobuf;
+use tendermint_proto::{
+    crypto::{public_key::Sum, PublicKey as RawPublicKey},
+    Protobuf,
+};
 
 // Note:On the golang side this is generic in the sense that it could everything that implements
 // github.com/tendermint/tendermint/crypto.PubKey

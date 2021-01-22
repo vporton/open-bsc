@@ -16,10 +16,13 @@
 
 //! Trace filters type definitions
 
-use super::trace::{Action, Res};
-use ethereum_types::{Address, Bloom, BloomInput};
 use std::ops::Range;
+
+use ethereum_types::{Address, Bloom, BloomInput};
+
 use trace::flat::FlatTrace;
+
+use super::trace::{Action, Res};
 
 /// Addresses filter.
 ///
@@ -133,6 +136,7 @@ impl Filter {
 #[cfg(test)]
 mod tests {
     use ethereum_types::{Address, Bloom, BloomInput};
+
     use evm::CallType;
     use trace::{
         flat::FlatTrace,

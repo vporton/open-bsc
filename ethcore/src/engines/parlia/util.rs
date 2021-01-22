@@ -25,11 +25,14 @@ use ethereum_types::{Address, H256};
 use ethkey::{public_to_address, recover as ec_recover, Signature};
 use lru_cache::LruCache;
 use parking_lot::RwLock;
-use std::collections::BTreeSet;
-use std::collections::HashSet;
-use std::str::FromStr;
-use types::header::Header;
-use types::transaction::{Action, SignedTransaction};
+use std::{
+    collections::{BTreeSet, HashSet},
+    str::FromStr,
+};
+use types::{
+    header::Header,
+    transaction::{Action, SignedTransaction},
+};
 
 /// How many recovered signature to cache in the memory.
 const CREATOR_CACHE_NUM: usize = 4096;

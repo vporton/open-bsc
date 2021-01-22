@@ -26,31 +26,29 @@ use std::{
 
 use bytes::Bytes;
 use ethereum_types::{Address, Bloom, H256, U256};
-use ethjson;
 use hash::{keccak, KECCAK_NULL_RLP};
+use maplit::btreeset;
 use parking_lot::RwLock;
 use rlp::{Rlp, RlpStream};
 use rustc_hex::FromHex;
-use types::{header::Header, BlockNumber};
-use vm::{ActionParams, ActionValue, CallType, EnvInfo, ParamsType};
 
 use builtin::Builtin;
 use engines::{
-    AuthorityRound, BasicAuthority, Clique, EthEngine, InstantSeal, InstantSealParams, NullEngine,
-    DEFAULT_BLOCKHASH_CONTRACT,
+    parlia::Parlia, AuthorityRound, BasicAuthority, Clique, EthEngine, InstantSeal,
+    InstantSealParams, NullEngine, DEFAULT_BLOCKHASH_CONTRACT,
 };
 use error::Error;
+pub use ethash::OptimizeFor;
+use ethjson;
 use executive::Executive;
 use factory::Factories;
 use machine::EthereumMachine;
-use maplit::btreeset;
 use pod_state::PodState;
 use spec::{seal::Generic as GenericSeal, Genesis};
 use state::{backend::Basic as BasicBackend, Backend, State, Substate};
 use trace::{NoopTracer, NoopVMTracer};
-
-use engines::parlia::Parlia;
-pub use ethash::OptimizeFor;
+use types::{header::Header, BlockNumber};
+use vm::{ActionParams, ActionValue, CallType, EnvInfo, ParamsType};
 
 const MAX_TRANSACTION_SIZE: usize = 300 * 1024;
 
@@ -1090,11 +1088,13 @@ impl Spec {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use state::State;
     use tempdir::TempDir;
+
+    use state::State;
     use test_helpers::get_temp_state_db;
     use types::{view, views::BlockView};
+
+    use super::*;
 
     #[test]
     fn test_load_empty() {

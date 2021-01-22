@@ -17,9 +17,10 @@
 //! Transaction Execution environment.
 use bytes::{Bytes, BytesRef};
 use crossbeam_utils::thread;
-use engines;
-use engines::parlia::util;
-use engines::parlia::util::is_system_transaction;
+use engines::{
+    self,
+    parlia::{util, util::is_system_transaction},
+};
 use ethereum_types::{Address, H256, U256, U512};
 use evm::{CallType, FinalizationResult, Finalize};
 use executed::ExecutionError;
@@ -1144,9 +1145,9 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
         let nonce = self.state.nonce(&sender)?;
 
         let schedule = self.schedule;
-        let base_gas_required = if parlia_engine && is_system_transaction(&t, &self.info.author){
+        let base_gas_required = if parlia_engine && is_system_transaction(&t, &self.info.author) {
             U256::from(0)
-        }else{
+        } else {
             U256::from(t.gas_required(&schedule))
         };
 
@@ -1589,7 +1590,7 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
         } else {
             &self.info.author
         };
-        if !fees_value.is_zero(){
+        if !fees_value.is_zero() {
             self.state.add_balance(
                 reward_receiver,
                 &fees_value,

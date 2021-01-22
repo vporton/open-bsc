@@ -16,26 +16,27 @@
 
 //! Single account in the system.
 
-use bytes::{Bytes, ToPretty};
-use error::Error;
-use ethereum_types::{Address, H256, U256};
-use ethtrie::{Result as TrieResult, SecTrieDB, TrieDB, TrieFactory};
-use hash::{keccak, KECCAK_EMPTY, KECCAK_NULL_RLP};
-use hash_db::HashDB;
-use keccak_hasher::KeccakHasher;
-use kvdb::DBValue;
-use lru_cache::LruCache;
-use pod_account::*;
-use rlp::{encode, RlpStream};
 use std::{
+    cell::{Cell, RefCell},
     collections::{BTreeMap, HashMap},
     fmt,
     sync::Arc,
 };
-use trie::{Recorder, Trie};
-use types::basic_account::BasicAccount;
 
-use std::cell::{Cell, RefCell};
+use bytes::{Bytes, ToPretty};
+use ethereum_types::{Address, H256, U256};
+use hash::{keccak, KECCAK_EMPTY, KECCAK_NULL_RLP};
+use hash_db::HashDB;
+use kvdb::DBValue;
+use lru_cache::LruCache;
+use rlp::{encode, RlpStream};
+use trie::{Recorder, Trie};
+
+use error::Error;
+use ethtrie::{Result as TrieResult, SecTrieDB, TrieDB, TrieFactory};
+use keccak_hasher::KeccakHasher;
+use pod_account::*;
+use types::basic_account::BasicAccount;
 
 const STORAGE_CACHE_ITEMS: usize = 8192;
 
@@ -692,12 +693,14 @@ impl fmt::Debug for Account {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use account_db::*;
     use bytes::Bytes;
     use ethereum_types::{Address, H256};
+
+    use account_db::*;
     use journaldb::new_memory_db;
     use rlp_compress::{compress, decompress, snapshot_swapper};
+
+    use super::*;
 
     #[test]
     fn account_compress() {

@@ -1,13 +1,9 @@
 //! Block size parameters
 
-use crate::{Error, Kind};
+use crate::{serializers, Error, Kind};
+use serde::{Deserialize, Serialize};
 use std::convert::{TryFrom, TryInto};
-use tendermint_proto::Protobuf;
-use {
-    crate::serializers,
-    serde::{Deserialize, Serialize},
-    tendermint_proto::abci::BlockParams as RawSize,
-};
+use tendermint_proto::{abci::BlockParams as RawSize, Protobuf};
 
 /// Block size parameters
 #[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq)]

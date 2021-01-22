@@ -28,11 +28,12 @@ use std::{
 
 use ethereum_types::{Address, H256};
 use hash_db::{AsHashDB, HashDB};
+use kvdb::DBValue;
+use parking_lot::Mutex;
+
 use journaldb::AsKeyedHashDB;
 use keccak_hasher::KeccakHasher;
-use kvdb::DBValue;
 use memory_db::MemoryDB;
-use parking_lot::Mutex;
 use state::Account;
 
 /// State backend. See module docs for more details.

@@ -23,7 +23,19 @@ use std::{
 
 use ansi_term::Colour;
 use bytes::Bytes;
+use ethereum_types::{Address, H256, U256};
+use parking_lot::{Mutex, RwLock};
+use rayon::prelude::*;
+
+use block::{ClosedBlock, SealedBlock};
 use call_contract::CallContract;
+use client::{
+    traits::{EngineClient, ForceUpdateSealing},
+    BlockChain, BlockId, BlockProducer, ChainInfo, ClientIoMessage, Nonce, SealedBlockImporter,
+    TransactionId, TransactionInfo,
+};
+use engines::{EngineSigner, EthEngine, Seal};
+use error::{Error, ErrorKind};
 #[cfg(feature = "work-notify")]
 use ethcore_miner::work_notify::NotifyWork;
 use ethcore_miner::{
@@ -32,15 +44,16 @@ use ethcore_miner::{
     pool::{self, PrioritizationStrategy, QueueStatus, TransactionQueue, VerifiedTransaction},
     service_transaction_checker::ServiceTransactionChecker,
 };
-use ethereum_types::{Address, H256, U256};
+use executed::ExecutionError;
+use executive::contract_address;
 use io::IoChannel;
 use miner::{
     self,
     pool_client::{CachedNonceClient, NonceCache, PoolClient},
     MinerService,
 };
-use parking_lot::{Mutex, RwLock};
-use rayon::prelude::*;
+use spec::Spec;
+use state::State;
 use types::{
     block::Block,
     header::Header,
@@ -49,19 +62,6 @@ use types::{
     BlockNumber,
 };
 use using_queue::{GetAction, UsingQueue};
-
-use block::{ClosedBlock, SealedBlock};
-use client::{
-    traits::{EngineClient, ForceUpdateSealing},
-    BlockChain, BlockId, BlockProducer, ChainInfo, ClientIoMessage, Nonce, SealedBlockImporter,
-    TransactionId, TransactionInfo,
-};
-use engines::{EngineSigner, EthEngine, Seal};
-use error::{Error, ErrorKind};
-use executed::ExecutionError;
-use executive::contract_address;
-use spec::Spec;
-use state::State;
 
 /// Different possible definitions for pending transaction set.
 #[derive(Debug, PartialEq)]
@@ -1491,17 +1491,17 @@ impl miner::MinerService for Miner {
 mod tests {
     use std::iter::FromIterator;
 
-    use super::*;
-    use accounts::AccountProvider;
-    use ethkey::{Generator, Random};
     use hash::keccak;
     use rustc_hex::FromHex;
-    use types::BlockNumber;
 
+    use accounts::AccountProvider;
     use client::{ChainInfo, EachBlockWith, ImportSealedBlock, TestBlockChainClient};
+    use ethkey::{Generator, Random};
     use miner::{MinerService, PendingOrdering};
     use test_helpers::{generate_dummy_client, generate_dummy_client_with_spec};
-    use types::transaction::Transaction;
+    use types::{transaction::Transaction, BlockNumber};
+
+    use super::*;
 
     #[test]
     fn should_prepare_block_to_seal() {

@@ -20,9 +20,10 @@ use bytes::Bytes;
 use ethereum_types::{Address, Bloom, BloomInput, U256};
 use rlp::{Decodable, DecoderError, Encodable, Rlp, RlpStream};
 
-use super::error::Error;
 use evm::CallType;
 use vm::ActionParams;
+
+use super::error::Error;
 
 /// `Call` result.
 #[derive(Debug, Clone, PartialEq, Default, RlpEncodable, RlpDecodable)]

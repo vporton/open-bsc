@@ -63,8 +63,9 @@ impl Decodable for CallType {
 
 #[cfg(test)]
 mod tests {
-    use super::CallType;
     use rlp::*;
+
+    use super::CallType;
 
     #[test]
     fn encode_call_type() {

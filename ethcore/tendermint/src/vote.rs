@@ -5,23 +5,20 @@ mod power;
 mod sign_vote;
 mod validator_index;
 
-pub use self::canonical_vote::CanonicalVote;
-pub use self::power::Power;
-pub use self::sign_vote::*;
-pub use self::validator_index::ValidatorIndex;
-use crate::chain::Id as ChainId;
-use crate::consensus::State;
-use crate::hash;
-use crate::{account, block, Signature, Time};
-use crate::{Error, Kind::*};
+pub use self::{
+    canonical_vote::CanonicalVote, power::Power, sign_vote::*, validator_index::ValidatorIndex,
+};
+use crate::{
+    account, block, chain::Id as ChainId, consensus::State, hash, Error, Kind::*, Signature, Time,
+};
 use bytes::BufMut;
-use ed25519::Signature as ed25519Signature;
-use ed25519::SIGNATURE_LENGTH as ed25519SignatureLength;
+use ed25519::{Signature as ed25519Signature, SIGNATURE_LENGTH as ed25519SignatureLength};
 use serde::{Deserialize, Serialize};
-use std::convert::{TryFrom, TryInto};
-use std::fmt;
-use tendermint_proto::types::Vote as RawVote;
-use tendermint_proto::{Error as ProtobufError, Protobuf};
+use std::{
+    convert::{TryFrom, TryInto},
+    fmt,
+};
+use tendermint_proto::{types::Vote as RawVote, Error as ProtobufError, Protobuf};
 
 use crate::signature::Signature::Ed25519;
 use std::str::FromStr;

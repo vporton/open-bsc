@@ -16,10 +16,11 @@
 
 //! Flat trace module
 
-use super::trace::{Action, Res};
 use ethereum_types::Bloom;
 use heapsize::HeapSizeOf;
 use rlp::{Decodable, DecoderError, Encodable, Rlp, RlpStream};
+
+use super::trace::{Action, Res};
 
 /// Trace localized in vector of traces produced by a single transaction.
 ///
@@ -139,13 +140,15 @@ impl Into<Vec<FlatTransactionTraces>> for FlatBlockTraces {
 
 #[cfg(test)]
 mod tests {
-    use super::{FlatBlockTraces, FlatTrace, FlatTransactionTraces};
-    use evm::CallType;
     use rlp::*;
+
+    use evm::CallType;
     use trace::{
         trace::{Action, Call, CallResult, Res, Reward, Suicide},
         RewardType,
     };
+
+    use super::{FlatBlockTraces, FlatTrace, FlatTransactionTraces};
 
     #[test]
     fn encode_flat_transaction_traces() {

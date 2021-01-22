@@ -22,10 +22,14 @@ pub mod util;
 
 use block::ExecutedBlock;
 use client::{BlockId, EngineClient};
-use engines::parlia::params::ParliaParams;
-use engines::parlia::snapshot::Snapshot;
-use engines::parlia::util::{is_system_transaction, recover_creator};
-use engines::{Engine, EngineError};
+use engines::{
+    parlia::{
+        params::ParliaParams,
+        snapshot::Snapshot,
+        util::{is_system_transaction, recover_creator},
+    },
+    Engine, EngineError,
+};
 use error::{BlockError, Error};
 use ethabi::FunctionOutputDecoder;
 use ethereum_types::{Address, H256, U256};
@@ -34,12 +38,16 @@ use kvdb::KeyValueDB;
 use lru_cache::LruCache;
 use machine::{Call, EthereumMachine};
 use parking_lot::RwLock;
-use std::collections::BTreeSet;
-use std::ops::{Add, Mul};
-use std::sync::{Arc, Weak};
-use std::time::{Duration, SystemTime};
-use types::header::{ExtendedHeader, Header};
-use types::transaction::{Action, Transaction};
+use std::{
+    collections::BTreeSet,
+    ops::{Add, Mul},
+    sync::{Arc, Weak},
+    time::{Duration, SystemTime},
+};
+use types::{
+    header::{ExtendedHeader, Header},
+    transaction::{Action, Transaction},
+};
 use unexpected::{Mismatch, OutOfBounds};
 
 // Protocol constants

@@ -18,11 +18,12 @@
 
 use std::{io::Write, ops};
 
-use common_types::{engines::epoch::Transition as EpochTransition, receipt::Receipt, BlockNumber};
 use ethereum_types::{H256, H264, U256};
 use heapsize::HeapSizeOf;
 use kvdb::PREFIX_LEN as DB_PREFIX_LEN;
 use rlp;
+
+use common_types::{engines::epoch::Transition as EpochTransition, receipt::Receipt, BlockNumber};
 use rlp_derive::{RlpDecodable, RlpDecodableWrapper, RlpEncodable, RlpEncodableWrapper};
 
 use crate::db::Key;

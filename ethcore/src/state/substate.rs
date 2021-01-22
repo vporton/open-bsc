@@ -15,11 +15,14 @@
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Execution environment substate.
-use super::CleanupMode;
-use ethereum_types::Address;
-use evm::{CleanDustMode, Schedule};
 use std::collections::HashSet;
+
+use ethereum_types::Address;
+
+use evm::{CleanDustMode, Schedule};
 use types::log_entry::LogEntry;
+
+use super::CleanupMode;
 
 /// State changes which should be applied in finalize,
 /// after transaction is fully executed.
@@ -72,8 +75,9 @@ impl Substate {
 
 #[cfg(test)]
 mod tests {
-    use super::Substate;
     use types::log_entry::LogEntry;
+
+    use super::Substate;
 
     #[test]
     fn created() {

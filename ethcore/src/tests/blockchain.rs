@@ -15,7 +15,6 @@
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
 use blockchain::BlockProvider;
-
 use test_helpers::{
     generate_dummy_blockchain, generate_dummy_blockchain_with_extra,
     generate_dummy_empty_blockchain,

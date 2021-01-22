@@ -287,8 +287,6 @@ fn verify_uncles(
 
 /// Phase 4 verification. Check block information against transaction enactment results,
 pub fn verify_block_final(expected: &Header, got: &Header) -> Result<(), Error> {
-
-
     if expected.state_root() != got.state_root() {
         println!("unexpected header  {:?}", expected.number());
         println!("{:?}", expected.state_root());
@@ -299,7 +297,12 @@ pub fn verify_block_final(expected: &Header, got: &Header) -> Result<(), Error> 
         })));
     }
     if expected.gas_used() != got.gas_used() {
-        println!("====== debug height {:?} expected{:?}, get {:?}",expected.number(), expected.gas_used(), got.gas_used() );
+        println!(
+            "====== debug height {:?} expected{:?}, get {:?}",
+            expected.number(),
+            expected.gas_used(),
+            got.gas_used()
+        );
         return Err(From::from(BlockError::InvalidGasUsed(Mismatch {
             expected: *expected.gas_used(),
             found: *got.gas_used(),
@@ -856,9 +859,9 @@ mod tests {
     //     bad_header.set_transactions_root(eip86_transactions_root.clone());
     //     bad_header.set_uncles_hash(good_uncles_hash.clone());
     //     match basic_test(&create_test_block_with_data(&bad_header, &eip86_transactions, &good_uncles), engine) {
-	// 		Err(Error(ErrorKind::Transaction(ref e), _)) if e == &::ethkey::Error::InvalidSignature.into() => (),
-	// 		e => panic!("Block verification failed.\nExpected: Transaction Error (Invalid Signature)\nGot: {:?}", e),
-	// 	}
+    // 		Err(Error(ErrorKind::Transaction(ref e), _)) if e == &::ethkey::Error::InvalidSignature.into() => (),
+    // 		e => panic!("Block verification failed.\nExpected: Transaction Error (Invalid Signature)\nGot: {:?}", e),
+    // 	}
     //
     //     let mut header = good.clone();
     //     header.set_transactions_root(good_transactions_root.clone());

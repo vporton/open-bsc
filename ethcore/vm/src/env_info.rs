@@ -16,10 +16,12 @@
 
 //! Environment information for transaction execution.
 
-use ethereum_types::{Address, H256, U256};
-use ethjson;
-use hash::keccak;
 use std::{cmp, sync::Arc};
+
+use ethereum_types::{Address, H256, U256};
+use hash::keccak;
+
+use ethjson;
 
 type BlockNumber = u64;
 
@@ -81,10 +83,13 @@ impl From<ethjson::vm::Env> for EnvInfo {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use ethereum_types::{Address, U256};
-    use ethjson;
     use std::str::FromStr;
+
+    use ethereum_types::{Address, U256};
+
+    use ethjson;
+
+    use super::*;
 
     #[test]
     fn it_serializes_from_json() {

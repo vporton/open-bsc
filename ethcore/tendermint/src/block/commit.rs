@@ -1,8 +1,9 @@
 //! Commits to a Tendermint blockchain
 
-use crate::block::commit_sig::CommitSig;
-use crate::block::{Height, Id, Round};
-use crate::{Error, Kind};
+use crate::{
+    block::{commit_sig::CommitSig, Height, Id, Round},
+    Error, Kind,
+};
 use serde::{Deserialize, Serialize};
 use std::convert::{TryFrom, TryInto};
 use tendermint_proto::types::Commit as RawCommit;

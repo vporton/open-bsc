@@ -15,14 +15,14 @@
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Evm input params.
+use std::sync::Arc;
+
 use bytes::Bytes;
 use ethereum_types::{Address, H256, U256};
-use ethjson;
 use hash::{keccak, KECCAK_EMPTY};
 
 use call_type::CallType;
-
-use std::sync::Arc;
+use ethjson;
 
 /// Transaction value
 #[derive(Clone, Debug)]

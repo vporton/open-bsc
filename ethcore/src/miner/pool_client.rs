@@ -18,22 +18,22 @@
 
 use std::{collections::HashMap, fmt, sync::Arc};
 
-use ethcore_miner::{
-    local_accounts::LocalAccounts, pool, pool::client::NonceClient,
-    service_transaction_checker::ServiceTransactionChecker,
-};
 use ethereum_types::{Address, H256, U256};
 use parking_lot::RwLock;
-use types::{
-    header::Header,
-    transaction::{self, SignedTransaction, UnverifiedTransaction},
-};
 
 use call_contract::CallContract;
 use client::{BlockInfo, Nonce, TransactionId};
 use engines::EthEngine;
+use ethcore_miner::{
+    local_accounts::LocalAccounts, pool, pool::client::NonceClient,
+    service_transaction_checker::ServiceTransactionChecker,
+};
 use miner;
 use transaction_ext::Transaction;
+use types::{
+    header::Header,
+    transaction::{self, SignedTransaction, UnverifiedTransaction},
+};
 
 /// Cache for state nonces.
 #[derive(Debug, Clone)]

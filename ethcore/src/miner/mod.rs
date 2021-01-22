@@ -19,30 +19,13 @@
 //! Miner module
 //! Keeps track of transactions and currently sealed pending block.
 
-mod miner;
-
-pub mod pool_client;
-#[cfg(feature = "stratum")]
-pub mod stratum;
-
-pub use self::miner::{Author, AuthoringParams, Miner, MinerOptions, Penalization, PendingSet};
-pub use ethcore_miner::{local_accounts::LocalAccounts, pool::PendingOrdering};
-
 use std::{
     collections::{BTreeMap, BTreeSet},
     sync::Arc,
 };
 
 use bytes::Bytes;
-use ethcore_miner::pool::{local_transactions, QueueStatus, VerifiedTransaction};
 use ethereum_types::{Address, H256, U256};
-use types::{
-    block::Block,
-    header::Header,
-    receipt::RichReceipt,
-    transaction::{self, PendingTransaction, SignedTransaction, UnverifiedTransaction},
-    BlockNumber,
-};
 
 use block::SealedBlock;
 use call_contract::{CallContract, RegistryInfo};
@@ -51,7 +34,24 @@ use client::{
     ScheduleInfo, SealedBlockImporter,
 };
 use error::Error;
+use ethcore_miner::pool::{local_transactions, QueueStatus, VerifiedTransaction};
+pub use ethcore_miner::{local_accounts::LocalAccounts, pool::PendingOrdering};
 use state::StateInfo;
+use types::{
+    block::Block,
+    header::Header,
+    receipt::RichReceipt,
+    transaction::{self, PendingTransaction, SignedTransaction, UnverifiedTransaction},
+    BlockNumber,
+};
+
+pub use self::miner::{Author, AuthoringParams, Miner, MinerOptions, Penalization, PendingSet};
+
+mod miner;
+
+pub mod pool_client;
+#[cfg(feature = "stratum")]
+pub mod stratum;
 
 /// Provides methods to verify incoming external transactions
 pub trait TransactionVerifierClient: Send + Sync

@@ -1,7 +1,9 @@
 //! Voting power
 
-use std::convert::{TryFrom, TryInto};
-use std::fmt;
+use std::{
+    convert::{TryFrom, TryInto},
+    fmt,
+};
 
 use serde::{de::Error as _, Deserialize, Deserializer, Serialize, Serializer};
 

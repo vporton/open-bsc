@@ -20,9 +20,10 @@ use std::{
 };
 
 use bytes::Bytes;
-use error::TrapKind;
 use ethereum_types::{Address, H256, U256};
 use hash::keccak;
+
+use error::TrapKind;
 use CallType;
 use ContractCreateResult;
 use CreateContractAddress;

@@ -1,8 +1,7 @@
 use crate::error::{Error, Kind};
 use serde::{de::Error as _, Deserialize, Deserializer, Serialize, Serializer};
-use std::convert::TryInto;
 use std::{
-    convert::TryFrom,
+    convert::{TryFrom, TryInto},
     fmt::{self, Debug, Display},
     str::FromStr,
 };

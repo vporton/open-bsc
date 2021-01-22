@@ -16,11 +16,11 @@
 
 //! Blockchain params.
 
-mod genesis;
-mod seal;
-mod spec;
-
 pub use self::{
     genesis::Genesis,
     spec::{CommonParams, OptimizeFor, Spec, SpecParams},
 };
+
+mod genesis;
+mod seal;
+mod spec;

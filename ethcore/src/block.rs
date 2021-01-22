@@ -47,6 +47,7 @@ use unexpected::{Mismatch, OutOfBounds};
 use verification::PreverifiedBlock;
 use vm::{EnvInfo, LastHashes};
 
+use engines::parlia::is_parlia;
 use hash::keccak;
 use rlp::{encode_list, Encodable, RlpStream};
 use types::{
@@ -54,7 +55,6 @@ use types::{
     receipt::{Receipt, TransactionOutcome},
     transaction::{Error as TransactionError, SignedTransaction},
 };
-use engines::parlia::is_parlia;
 
 /// Block that is ready for transactions to be added.
 ///

@@ -16,15 +16,17 @@
 
 //! Client tests of tracing
 
+use std::sync::Arc;
+
+use ethereum_types::{Address, U256};
+use hash::keccak;
+
 use block::*;
 use client::{BlockChainClient, Client, ClientConfig, *};
-use ethereum_types::{Address, U256};
 use ethkey::KeyPair;
-use hash::keccak;
 use io::*;
 use miner::Miner;
 use spec::*;
-use std::sync::Arc;
 use test_helpers::{self, get_temp_state_db};
 use trace::{trace::Action::Reward, LocalizedTrace, RewardType};
 use types::{

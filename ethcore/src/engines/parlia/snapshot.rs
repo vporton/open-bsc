@@ -14,18 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
-use client::BlockId;
-use client::EngineClient;
+use client::{BlockId, EngineClient};
 use db;
-use engines::parlia::util::recover_creator;
-use engines::parlia::{ADDRESS_LENGTH, SIGNATURE_LENGTH, VANITY_LENGTH};
-use engines::EngineError;
+use engines::{
+    parlia::{util::recover_creator, ADDRESS_LENGTH, SIGNATURE_LENGTH, VANITY_LENGTH},
+    EngineError,
+};
 use error::Error;
 use ethereum_types::{Address, H256};
 use kvdb::KeyValueDB;
 use serde::{Deserialize, Serialize};
-use std::collections::{BTreeSet, BTreeMap};
-use std::sync::Arc;
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    sync::Arc,
+};
 use types::header::Header;
 
 /// Snapshot for each block.

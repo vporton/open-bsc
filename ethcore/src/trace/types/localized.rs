@@ -16,9 +16,11 @@
 
 //! Localized traces type definitions
 
-use super::trace::{Action, Res};
 use ethereum_types::H256;
+
 use types::BlockNumber;
+
+use super::trace::{Action, Res};
 
 /// Localized trace.
 #[derive(Debug, PartialEq, Clone)]

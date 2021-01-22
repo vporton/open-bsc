@@ -1,12 +1,13 @@
 //! Block headers
 
-use crate::merkle::simple_hash_from_byte_vectors;
-use crate::{account, block, chain, AppHash, Error, Hash, Kind, Time};
+use crate::{
+    account, block, chain, merkle::simple_hash_from_byte_vectors, AppHash, Error, Hash, Kind, Time,
+};
 use serde::{Deserialize, Serialize};
 use std::convert::{TryFrom, TryInto};
-use tendermint_proto::types::Header as RawHeader;
-use tendermint_proto::version::Consensus as RawConsensusVersion;
-use tendermint_proto::Protobuf;
+use tendermint_proto::{
+    types::Header as RawHeader, version::Consensus as RawConsensusVersion, Protobuf,
+};
 
 /// Block `Header` values contain metadata about the block and about the
 /// consensus, as well as commitments to the data in the current block, the
@@ -234,9 +235,7 @@ impl From<Version> for RawConsensusVersion {
 #[cfg(test)]
 mod tests {
     use super::Header;
-    use crate::hash::Algorithm;
-    use crate::test::test_serialization_roundtrip;
-    use crate::Hash;
+    use crate::{hash::Algorithm, test::test_serialization_roundtrip, Hash};
 
     #[test]
     fn serialization_roundtrip() {

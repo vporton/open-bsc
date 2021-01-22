@@ -16,16 +16,15 @@
 
 //! Blockchain database client.
 
-mod ancient_import;
-mod bad_blocks;
-mod client;
-mod config;
-#[cfg(any(test, feature = "test-helpers"))]
-mod evm_test_client;
-mod io_message;
-#[cfg(any(test, feature = "test-helpers"))]
-pub mod test_client;
-mod trace;
+pub use error::TransactionImportError;
+pub use executive::{Executed, Executive, TransactOptions};
+pub use state::StateInfo;
+pub use types::{
+    call_analytics::CallAnalytics, ids::*, pruning_info::PruningInfo,
+    trace_filter::Filter as TraceFilter,
+};
+pub use verification::VerifierType;
+pub use vm::{EnvInfo, LastHashes};
 
 #[cfg(any(test, feature = "test-helpers"))]
 pub use self::evm_test_client::{EvmTestClient, EvmTestError, TransactErr, TransactSuccess};
@@ -44,18 +43,17 @@ pub use self::{
         StateOrBlock, TransactionInfo,
     },
 };
-pub use state::StateInfo;
 
-pub use types::{
-    call_analytics::CallAnalytics, ids::*, pruning_info::PruningInfo,
-    trace_filter::Filter as TraceFilter,
-};
-
-pub use executive::{Executed, Executive, TransactOptions};
-pub use vm::{EnvInfo, LastHashes};
-
-pub use error::TransactionImportError;
-pub use verification::VerifierType;
+mod ancient_import;
+mod bad_blocks;
+mod client;
+mod config;
+#[cfg(any(test, feature = "test-helpers"))]
+mod evm_test_client;
+mod io_message;
+#[cfg(any(test, feature = "test-helpers"))]
+pub mod test_client;
+mod trace;
 
 pub mod traits;
 

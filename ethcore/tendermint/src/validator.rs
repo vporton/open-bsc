@@ -6,10 +6,13 @@ use subtle_encoding::base64;
 use crate::{account, hash::Hash, merkle, vote, Error, Kind, PublicKey, Signature};
 
 use std::convert::{TryFrom, TryInto};
-use tendermint_proto::types::SimpleValidator as RawSimpleValidator;
-use tendermint_proto::types::Validator as RawValidator;
-use tendermint_proto::types::ValidatorSet as RawValidatorSet;
-use tendermint_proto::Protobuf;
+use tendermint_proto::{
+    types::{
+        SimpleValidator as RawSimpleValidator, Validator as RawValidator,
+        ValidatorSet as RawValidatorSet,
+    },
+    Protobuf,
+};
 
 /// Validator set contains a vector of validators
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]

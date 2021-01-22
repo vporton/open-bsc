@@ -16,12 +16,11 @@
 
 //! Tracing
 
-mod config;
-mod db;
-mod executive_tracer;
-mod import;
-mod noop_tracer;
-mod types;
+use ethereum_types::{Address, H256, U256};
+use kvdb::DBTransaction;
+
+use types::BlockNumber;
+use vm::{ActionParams, Error as VmError};
 
 pub use self::{
     config::Config,
@@ -30,23 +29,24 @@ pub use self::{
     import::ImportRequest,
     localized::LocalizedTrace,
     noop_tracer::{NoopTracer, NoopVMTracer},
+    types::{
+        error::Error as TraceError,
+        filter,
+        filter::{AddressesFilter, Filter},
+        flat,
+        flat::{FlatBlockTraces, FlatTrace, FlatTransactionTraces},
+        localized, trace,
+        trace::{MemoryDiff, RewardType, StorageDiff, VMExecutedOperation, VMOperation, VMTrace},
+        Tracing,
+    },
 };
 
-pub use self::types::{
-    error::Error as TraceError,
-    filter,
-    filter::{AddressesFilter, Filter},
-    flat,
-    flat::{FlatBlockTraces, FlatTrace, FlatTransactionTraces},
-    localized, trace,
-    trace::{MemoryDiff, RewardType, StorageDiff, VMExecutedOperation, VMOperation, VMTrace},
-    Tracing,
-};
-
-use ethereum_types::{Address, H256, U256};
-use kvdb::DBTransaction;
-use types::BlockNumber;
-use vm::{ActionParams, Error as VmError};
+mod config;
+mod db;
+mod executive_tracer;
+mod import;
+mod noop_tracer;
+mod types;
 
 /// This trait is used by executive to build traces.
 pub trait Tracer: Send {

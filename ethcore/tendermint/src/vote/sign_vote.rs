@@ -1,12 +1,13 @@
-use crate::chain;
-use crate::Vote;
-use crate::{Error, Kind};
+use crate::{chain, Error, Kind, Vote};
 use bytes::BufMut;
 use std::convert::TryFrom;
-use tendermint_proto::privval::SignedVoteResponse as RawSignedVoteResponse;
-use tendermint_proto::privval::{RemoteSignerError, SignVoteRequest as RawSignVoteRequest};
-use tendermint_proto::Error as ProtobufError;
-use tendermint_proto::Protobuf;
+use tendermint_proto::{
+    privval::{
+        RemoteSignerError, SignVoteRequest as RawSignVoteRequest,
+        SignedVoteResponse as RawSignedVoteResponse,
+    },
+    Error as ProtobufError, Protobuf,
+};
 
 /// SignVoteRequest is a request to sign a vote
 #[derive(Clone, PartialEq, Debug)]
@@ -91,21 +92,17 @@ impl From<SignedVoteResponse> for RawSignedVoteResponse {
 
 #[cfg(test)]
 mod tests {
-    use crate::account::Id as AccountId;
-    use crate::block::parts::Header;
-    use crate::block::Height;
-    use crate::block::Id as BlockId;
-    use crate::block::Round;
-    use crate::chain::Id as ChainId;
-    use crate::hash::Algorithm;
-    use crate::signature::{Signature, ED25519_SIGNATURE_SIZE};
-    use crate::vote::{CanonicalVote, ValidatorIndex};
-    use crate::vote::{SignVoteRequest, Type};
-    use crate::Hash;
-    use crate::Vote;
+    use crate::{
+        account::Id as AccountId,
+        block::{parts::Header, Height, Id as BlockId, Round},
+        chain::Id as ChainId,
+        hash::Algorithm,
+        signature::{Signature, ED25519_SIGNATURE_SIZE},
+        vote::{CanonicalVote, SignVoteRequest, Type, ValidatorIndex},
+        Hash, Vote,
+    };
     use chrono::{DateTime, Utc};
-    use std::convert::TryFrom;
-    use std::str::FromStr;
+    use std::{convert::TryFrom, str::FromStr};
     use tendermint_proto::Protobuf;
 
     #[test]

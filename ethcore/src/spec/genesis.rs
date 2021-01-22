@@ -15,8 +15,9 @@
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
 use ethereum_types::{Address, H256, U256};
-use ethjson;
 use hash::KECCAK_NULL_RLP;
+
+use ethjson;
 use spec::seal::Seal;
 
 /// Genesis components.

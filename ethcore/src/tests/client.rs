@@ -19,6 +19,11 @@ use std::{
     sync::Arc,
 };
 
+use ethereum_types::{Address, U256};
+use hash::keccak;
+use rustc_hex::ToHex;
+use tempdir::TempDir;
+
 use client::{
     traits::{
         BlockChainClient, BlockChainReset, BlockInfo, ChainInfo, ImportBlock, ImportExportBlocks,
@@ -26,16 +31,12 @@ use client::{
     Client, ClientConfig, ImportSealedBlock, PrepareOpenBlock,
 };
 use ethereum;
-use ethereum_types::{Address, U256};
 use ethkey::KeyPair;
 use executive::{Executive, TransactOptions};
-use hash::keccak;
 use io::IoChannel;
 use miner::{Miner, MinerService, PendingOrdering};
-use rustc_hex::ToHex;
 use spec::Spec;
 use state::{self, CleanupMode, State, StateInfo};
-use tempdir::TempDir;
 use test_helpers::{
     self, generate_dummy_client, generate_dummy_client_with_data, get_bad_state_dummy_block,
     get_good_dummy_block, get_good_dummy_block_seq, get_test_client_with_blocks,

@@ -66,8 +66,7 @@ impl PartialOrd for State {
 #[cfg(test)]
 mod tests {
     use super::State;
-    use crate::block;
-    use crate::Hash;
+    use crate::{block, Hash};
     use std::str::FromStr;
 
     #[test]

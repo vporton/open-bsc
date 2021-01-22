@@ -16,10 +16,10 @@
 
 //! Database utilities and definitions.
 
-use kvdb::{DBTransaction, KeyValueDB};
-use parking_lot::RwLock;
 use std::{collections::HashMap, hash::Hash, ops::Deref};
 
+use kvdb::{DBTransaction, KeyValueDB};
+use parking_lot::RwLock;
 use rlp;
 
 // database columns
@@ -42,7 +42,6 @@ pub const COL_NODE_INFO: Option<u32> = Some(6);
 pub const COL_PARLIA_SNAPSHOT: Option<u32> = Some(7);
 /// Number of columns in DB
 pub const NUM_COLUMNS: Option<u32> = Some(8);
-
 
 /// Modes for updating caches.
 #[derive(Clone, Copy)]

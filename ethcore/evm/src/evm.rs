@@ -16,8 +16,10 @@
 
 //! Evm interface.
 
-use ethereum_types::{U128, U256, U512};
 use std::{cmp, fmt, ops};
+
+use ethereum_types::{U128, U256, U512};
+
 use vm::{Error, Ext, GasLeft, Result, ReturnData};
 
 /// Finalization result. Gas Left: either it is a known value, or it needs to be computed by processing
@@ -172,8 +174,9 @@ impl CostType for usize {
 
 #[cfg(test)]
 mod tests {
-    use super::CostType;
     use ethereum_types::U256;
+
+    use super::CostType;
 
     #[test]
     fn should_calculate_overflow_mul_shr_without_overflow() {

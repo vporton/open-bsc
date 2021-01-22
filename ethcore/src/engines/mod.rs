@@ -63,11 +63,11 @@ use block::ExecutedBlock;
 use bytes::Bytes;
 use ethereum_types::{Address, H256, H64, U256};
 use ethkey::Signature;
+use kvdb::KeyValueDB;
 use machine::{self, AuxiliaryData, AuxiliaryRequest, Machine};
 use std::str::FromStr;
 use types::ancestry_action::AncestryAction;
 use unexpected::{Mismatch, OutOfBounds};
-use kvdb::KeyValueDB;
 
 /// Default EIP-210 contract code.
 /// As defined in https://github.com/ethereum/EIPs/pull/210
@@ -183,7 +183,6 @@ impl fmt::Display for EngineError {
             ParliaAuthorMismatch => format!("Author mismatch"),
             ParliaSystemTxMismatch => format!("SystemTx mismatch"),
             ParliaFutureBlock => format!("Receiving future block"),
-
 
             CliqueCheckpointNoSigner => format!("Checkpoint block list of signers was empty"),
 
@@ -515,7 +514,7 @@ pub trait Engine<M: Machine>: Sync + Send {
     fn register_client(&self, _client: Weak<M::EngineClient>) {}
 
     /// Add db if needed. Only for parlia so far.
-    fn register_db(&self, _db: Arc<dyn KeyValueDB>){}
+    fn register_db(&self, _db: Arc<dyn KeyValueDB>) {}
 
     /// Trigger next step of the consensus engine.
     fn step(&self) {}

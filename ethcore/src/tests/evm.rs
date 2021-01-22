@@ -16,19 +16,19 @@
 
 //! Tests of EVM integration with transaction execution.
 
+use std::sync::Arc;
+
+use ethereum_types::{Address, H256};
+use hash::keccak;
+use rustc_hex::FromHex;
+
 use evm::{Factory, VMType};
 use executive::Executive;
-use hash::keccak;
 use state::Substate;
-use std::sync::Arc;
 use test_helpers::get_temp_state_with_factory;
 use trace::{NoopTracer, NoopVMTracer};
 use types::transaction::SYSTEM_ADDRESS;
 use vm::{ActionParams, ActionValue, CallType, EnvInfo, ParamsType};
-
-use rustc_hex::FromHex;
-
-use ethereum_types::{Address, H256};
 
 evm_test! {test_blockhash_eip210: test_blockhash_eip210_int}
 fn test_blockhash_eip210(factory: Factory) {

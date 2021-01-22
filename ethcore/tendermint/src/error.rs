@@ -3,8 +3,7 @@
 use anomaly::{BoxError, Context};
 use thiserror::Error;
 
-use crate::account;
-use crate::vote;
+use crate::{account, vote};
 
 /// Error type
 pub type Error = BoxError;

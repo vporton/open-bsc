@@ -1,15 +1,17 @@
 //! Block parts
 
-use crate::hash::Algorithm;
-use crate::hash::SHA256_HASH_SIZE;
-use crate::Hash;
-use crate::{Error, Kind};
+use crate::{
+    hash::{Algorithm, SHA256_HASH_SIZE},
+    Error, Hash, Kind,
+};
 use serde::{Deserialize, Serialize};
 use std::convert::TryFrom;
-use tendermint_proto::types::{
-    CanonicalPartSetHeader as RawCanonicalPartSetHeader, PartSetHeader as RawPartSetHeader,
+use tendermint_proto::{
+    types::{
+        CanonicalPartSetHeader as RawCanonicalPartSetHeader, PartSetHeader as RawPartSetHeader,
+    },
+    Protobuf,
 };
-use tendermint_proto::Protobuf;
 
 /// Block parts header
 #[derive(

@@ -4,16 +4,19 @@ use crate::{
     block::signed_header::SignedHeader, serializers, vote::Power, Error, Kind, Time, Vote,
 };
 use serde::{Deserialize, Serialize};
-use std::convert::{TryFrom, TryInto};
-use std::slice;
-use tendermint_proto::google::protobuf::Duration as RawDuration;
-use tendermint_proto::types::evidence::Sum as RawSum;
-use tendermint_proto::types::evidence::Sum;
-use tendermint_proto::types::DuplicateVoteEvidence as RawDuplicateVoteEvidence;
-use tendermint_proto::types::Evidence as RawEvidence;
-use tendermint_proto::types::EvidenceList as RawEvidenceList;
-use tendermint_proto::types::EvidenceParams as RawEvidenceParams;
-use tendermint_proto::Protobuf;
+use std::{
+    convert::{TryFrom, TryInto},
+    slice,
+};
+use tendermint_proto::{
+    google::protobuf::Duration as RawDuration,
+    types::{
+        evidence::{Sum as RawSum, Sum},
+        DuplicateVoteEvidence as RawDuplicateVoteEvidence, Evidence as RawEvidence,
+        EvidenceList as RawEvidenceList, EvidenceParams as RawEvidenceParams,
+    },
+    Protobuf,
+};
 
 /// Evidence of malfeasance by validators (i.e. signing conflicting votes).
 /// encoded using an Amino prefix. There is currently only a single type of

@@ -16,13 +16,13 @@
 
 //! Types used in the public api
 
+use self::flat::FlatTransactionTraces;
+
 pub mod error;
 pub mod filter;
 pub mod flat;
 pub mod localized;
 pub mod trace;
-
-use self::flat::FlatTransactionTraces;
 
 /// Container for block traces.
 #[derive(Clone)]

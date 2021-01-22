@@ -17,8 +17,9 @@
 //! Spec seal.
 
 use ethereum_types::{H256, H520, H64};
-use ethjson;
 use rlp::RlpStream;
+
+use ethjson;
 
 /// Classic ethereum seal.
 pub struct Ethereum {

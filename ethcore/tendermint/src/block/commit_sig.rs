@@ -1,11 +1,9 @@
 //! CommitSig within Commit
 
-use crate::{account, Signature, Time};
-use crate::{Error, Kind};
+use crate::{account, Error, Kind, Signature, Time};
 use num_traits::ToPrimitive;
 use std::convert::{TryFrom, TryInto};
-use tendermint_proto::types::BlockIdFlag;
-use tendermint_proto::types::CommitSig as RawCommitSig;
+use tendermint_proto::types::{BlockIdFlag, CommitSig as RawCommitSig};
 
 /// CommitSig represents a signature of a validator.
 /// It's a part of the Commit and can be used to reconstruct the vote set given the validator set.

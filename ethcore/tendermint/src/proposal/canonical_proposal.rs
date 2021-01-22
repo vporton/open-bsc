@@ -1,13 +1,13 @@
 //! CanonicalProposal
 
 use super::Type;
-use crate::block::{Height, Id as BlockId, Round};
-use crate::chain::Id as ChainId;
-use crate::Time;
-use crate::{Error, Kind};
+use crate::{
+    block::{Height, Id as BlockId, Round},
+    chain::Id as ChainId,
+    Error, Kind, Time,
+};
 use std::convert::{TryFrom, TryInto};
-use tendermint_proto::types::CanonicalProposal as RawCanonicalProposal;
-use tendermint_proto::Protobuf;
+use tendermint_proto::{types::CanonicalProposal as RawCanonicalProposal, Protobuf};
 
 /// CanonicalProposal for signing
 #[derive(Clone, PartialEq)]
@@ -98,12 +98,13 @@ impl CanonicalProposal {
 
 #[cfg(test)]
 mod tests {
-    use crate::proposal::canonical_proposal::CanonicalProposal;
-    use crate::proposal::Type;
+    use crate::proposal::{canonical_proposal::CanonicalProposal, Type};
     use std::convert::TryFrom;
-    use tendermint_proto::types::CanonicalBlockId as RawCanonicalBlockId;
-    use tendermint_proto::types::CanonicalPartSetHeader as RawCanonicalPartSetHeader;
-    use tendermint_proto::types::CanonicalProposal as RawCanonicalProposal;
+    use tendermint_proto::types::{
+        CanonicalBlockId as RawCanonicalBlockId,
+        CanonicalPartSetHeader as RawCanonicalPartSetHeader,
+        CanonicalProposal as RawCanonicalProposal,
+    };
 
     #[test]
     fn canonical_proposal_domain_checks() {

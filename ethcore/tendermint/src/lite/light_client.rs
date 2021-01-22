@@ -1,19 +1,19 @@
 //! Light header verify
-use crate::account::Id as AccountId;
-use crate::hash::SHA256_HASH_SIZE;
-use crate::merkle::{simple_hash_from_byte_vectors, Hash};
-use crate::PublicKey;
+use crate::{
+    account::Id as AccountId,
+    hash::SHA256_HASH_SIZE,
+    merkle::{simple_hash_from_byte_vectors, Hash},
+    PublicKey,
+};
 use bstr::ByteSlice;
 use byteorder::{BigEndian, ByteOrder};
 use parity_bytes::BytesRef;
 use prost_amino::Message as _;
 use sha2::{Digest, Sha256};
-use std::collections::HashSet;
-use std::convert::TryInto;
-use tendermint_proto::crypto::CanonicalVote as RawCanonicalVote;
+use std::{collections::HashSet, convert::TryInto};
 use tendermint_proto::crypto::{
-    CanonicalBlockId, CanonicalPartSetHeader, Commit, CommitSig, LightBlock, SignedHeader,
-    ValidatorSet,
+    CanonicalBlockId, CanonicalPartSetHeader, CanonicalVote as RawCanonicalVote, Commit, CommitSig,
+    LightBlock, SignedHeader, ValidatorSet,
 };
 
 const PRECOMPILE_CONTRACT_INPUT_META_DATA_LENGTH: usize = 32;
@@ -712,8 +712,7 @@ mod test {
     use parity_bytes::BytesRef;
     use prost_amino::Message as _;
 
-    use tendermint_proto::crypto::CanonicalVote;
-    use tendermint_proto::crypto::LightBlock;
+    use tendermint_proto::crypto::{CanonicalVote, LightBlock};
 
     #[test]
     fn test_verify_execute() {

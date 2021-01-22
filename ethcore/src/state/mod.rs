@@ -19,7 +19,6 @@
 //! Unconfirmed sub-states are managed with `checkpoint`s which may be canonicalized
 //! or rolled back.
 
-use hash::{KECCAK_EMPTY, KECCAK_NULL_RLP};
 use std::{
     cell::{RefCell, RefMut},
     collections::{hash_map::Entry, BTreeMap, BTreeSet, HashMap, HashSet},
@@ -27,10 +26,19 @@ use std::{
     sync::Arc,
 };
 
+use bytes::Bytes;
+use ethereum_types::{Address, H256, U256};
+use hash::{KECCAK_EMPTY, KECCAK_NULL_RLP};
+use hash_db::{AsHashDB, HashDB};
+use kvdb::DBValue;
+use trie::{Recorder, Trie, TrieError};
+
 use error::Error;
+use ethtrie::{Result as TrieResult, TrieDB};
 use executed::{Executed, ExecutionError};
 use executive::{Executive, TransactOptions};
 use factory::{Factories, VmFactory};
+use keccak_hasher::KeccakHasher;
 use machine::EthereumMachine as Machine;
 use pod_account::*;
 use pod_state::{self, PodState};
@@ -44,21 +52,12 @@ use types::{
 };
 use vm::EnvInfo;
 
-use bytes::Bytes;
-use ethereum_types::{Address, H256, U256};
-use hash_db::{AsHashDB, HashDB};
-use keccak_hasher::KeccakHasher;
-use kvdb::DBValue;
-
-use ethtrie::{Result as TrieResult, TrieDB};
-use trie::{Recorder, Trie, TrieError};
+pub use self::{account::Account, backend::Backend, substate::Substate};
 
 mod account;
 mod substate;
 
 pub mod backend;
-
-pub use self::{account::Account, backend::Backend, substate::Substate};
 
 /// Used to return information about an `State::apply` operation.
 pub struct ApplyOutcome<T, V> {
@@ -1585,19 +1584,22 @@ impl Clone for State<StateDB> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use std::{str::FromStr, sync::Arc};
+
     use ethereum_types::{Address, H256, U256};
+    use hash::{keccak, KECCAK_NULL_RLP};
+    use rustc_hex::FromHex;
+
     use ethkey::Secret;
     use evm::CallType;
-    use hash::{keccak, KECCAK_NULL_RLP};
     use machine::EthereumMachine;
-    use rustc_hex::FromHex;
     use spec::*;
-    use std::{str::FromStr, sync::Arc};
     use test_helpers::{get_temp_state, get_temp_state_db};
     use trace::{trace, FlatTrace, TraceError};
     use types::transaction::*;
     use vm::EnvInfo;
+
+    use super::*;
 
     fn secret() -> Secret {
         keccak("").into()

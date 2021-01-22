@@ -17,18 +17,18 @@
 //! Trace database.
 use std::{collections::HashMap, sync::Arc};
 
-use blockchain::BlockChainDB;
-use db::{self, cache_manager::CacheManager, CacheUpdatePolicy, Key, Readable, Writable};
 use ethereum_types::{H256, H264};
 use heapsize::HeapSizeOf;
 use kvdb::DBTransaction;
 use parking_lot::RwLock;
-use types::BlockNumber;
 
+use blockchain::BlockChainDB;
+use db::{self, cache_manager::CacheManager, CacheUpdatePolicy, Key, Readable, Writable};
 use trace::{
     flat::{FlatBlockTraces, FlatTrace, FlatTransactionTraces},
     Config, Database as TraceDatabase, DatabaseExtras, Filter, ImportRequest, LocalizedTrace,
 };
+use types::BlockNumber;
 
 const TRACE_DB_VER: &'static [u8] = b"1.0";
 
@@ -403,10 +403,12 @@ where
 
 #[cfg(test)]
 mod tests {
-    use ethereum_types::{Address, H256, U256};
-    use evm::CallType;
-    use kvdb::DBTransaction;
     use std::{collections::HashMap, sync::Arc};
+
+    use ethereum_types::{Address, H256, U256};
+    use kvdb::DBTransaction;
+
+    use evm::CallType;
     use test_helpers::new_db;
     use trace::{
         flat::{FlatBlockTraces, FlatTrace, FlatTransactionTraces},

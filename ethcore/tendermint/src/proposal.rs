@@ -8,16 +8,15 @@ pub use self::canonical_proposal::CanonicalProposal;
 pub use msg_type::Type;
 pub use sign_proposal::{SignProposalRequest, SignedProposalResponse};
 
-use crate::block::{Height, Id as BlockId, Round};
-use crate::chain::Id as ChainId;
-use crate::consensus::State;
-use crate::Signature;
-use crate::Time;
-use crate::{Error, Kind};
+use crate::{
+    block::{Height, Id as BlockId, Round},
+    chain::Id as ChainId,
+    consensus::State,
+    Error, Kind, Signature, Time,
+};
 use bytes::BufMut;
 use std::convert::{TryFrom, TryInto};
-use tendermint_proto::types::Proposal as RawProposal;
-use tendermint_proto::{Error as ProtobufError, Protobuf};
+use tendermint_proto::{types::Proposal as RawProposal, Error as ProtobufError, Protobuf};
 
 /// Proposal
 #[derive(Clone, PartialEq, Debug)]

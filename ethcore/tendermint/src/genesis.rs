@@ -2,8 +2,7 @@
 
 use crate::{chain, consensus, validator, Time};
 use chrono::DateTime;
-use serde::de::Error;
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{de::Error, Deserialize, Deserializer, Serialize};
 use std::convert::TryFrom;
 use tendermint_proto::google::protobuf::Timestamp;
 

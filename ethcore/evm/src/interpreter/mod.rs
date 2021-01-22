@@ -16,26 +16,20 @@
 
 //! Rust VM implementation
 
-#[macro_use]
-mod informant;
-mod gasometer;
-mod memory;
-mod shared_cache;
-mod stack;
+use std::{cmp, marker::PhantomData, mem, sync::Arc};
 
+use bit_set::BitSet;
 use bytes::Bytes;
 use ethereum_types::{Address, H256, U256};
 use hash::keccak;
 use num_bigint::BigUint;
-use std::{cmp, marker::PhantomData, mem, sync::Arc};
 
+use evm::CostType;
+use instructions::{self, Instruction, InstructionInfo};
 use vm::{
     self, ActionParams, ActionValue, CallType, ContractCreateResult, CreateContractAddress,
     GasLeft, MessageCallResult, ParamsType, ReturnData, Schedule, TrapError, TrapKind,
 };
-
-use evm::CostType;
-use instructions::{self, Instruction, InstructionInfo};
 
 pub use self::shared_cache::SharedCache;
 use self::{
@@ -44,7 +38,12 @@ use self::{
     stack::{Stack, VecStack},
 };
 
-use bit_set::BitSet;
+#[macro_use]
+mod informant;
+mod gasometer;
+mod memory;
+mod shared_cache;
+mod stack;
 
 const GASOMETER_PROOF: &str = "If gasometer is None, Err is immediately returned in step; this function is only called by step; qed";
 
@@ -1511,9 +1510,11 @@ fn address_to_u256(value: Address) -> U256 {
 
 #[cfg(test)]
 mod tests {
-    use factory::Factory;
-    use rustc_hex::FromHex;
     use std::sync::Arc;
+
+    use rustc_hex::FromHex;
+
+    use factory::Factory;
     use vm::{
         self,
         tests::{test_finalize, FakeExt},
