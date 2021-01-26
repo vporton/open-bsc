@@ -74,6 +74,7 @@ pub const CHECKPOINT_INTERVAL: u64 = 1024;
 /// Percentage to system reward.
 pub const SYSTEM_REWARD_PERCENT: usize = 4;
 
+const MAX_SYSTEM_REWARD: &str = "56bc75e2d63100000";
 const INIT_TX_NUM: usize = 7;
 
 use_contract!(validator_ins, "res/contracts/bsc_validators.json");
@@ -217,6 +218,21 @@ impl Engine<EthereumMachine> for Parlia {
         }
         let mut expect_system_txs = vec![];
         let mut actual_system_txs = vec![];
+        let mut have_sys_reward = false;
+        for tx in txs {
+            if is_system_transaction(tx, header.author()) {
+                actual_system_txs.push(tx);
+            }
+        }
+        if header.number() == 1 {
+            // skip first 7 init transaction
+            actual_system_txs = actual_system_txs[INIT_TX_NUM..].to_owned();
+        }
+        for tx in actual_system_txs.iter() {
+            if tx.action == Action::Call(util::SYSTEM_REWARD_CONTRACT.clone()) {
+                have_sys_reward = true;
+            }
+        }
         if *_block.header.difficulty() != DIFF_INTURN {
             let snap = self.snapshot(header.number() - 1, *header.parent_hash())?;
             let suppose_val = snap.suppose_validator();
@@ -254,16 +270,22 @@ impl Engine<EthereumMachine> for Parlia {
         if reward > 0.into() {
             let sys_reward = reward >> SYSTEM_REWARD_PERCENT;
             if sys_reward > 0.into() {
-                let sys_reward_tx = Transaction {
-                    nonce: Default::default(),
-                    gas_price: 0.into(),
-                    gas: (std::u64::MAX / 2).into(),
-                    value: sys_reward,
-                    action: Action::Call(util::SYSTEM_REWARD_CONTRACT.clone()),
-                    data: vec![],
-                };
-                expect_system_txs.push(sys_reward_tx);
-                reward -= sys_reward;
+                let sys_hold = _block.state.balance(&util::SYSTEM_REWARD_CONTRACT).unwrap();
+                if !have_sys_reward && sys_hold < MAX_SYSTEM_REWARD.into() {
+                    Err(EngineError::ParliaSystemTxMismatch)?
+                }
+                if have_sys_reward {
+                    let sys_reward_tx = Transaction {
+                        nonce: Default::default(),
+                        gas_price: 0.into(),
+                        gas: (std::u64::MAX / 2).into(),
+                        value: sys_reward,
+                        action: Action::Call(util::SYSTEM_REWARD_CONTRACT.clone()),
+                        data: vec![],
+                    };
+                    expect_system_txs.push(sys_reward_tx);
+                    reward -= sys_reward;
+                }
             }
             let validator_dis_data =
                 validator_ins::functions::deposit::encode_input(*header.author());
@@ -278,15 +300,6 @@ impl Engine<EthereumMachine> for Parlia {
             expect_system_txs.push(validator_dis_tx);
         }
 
-        for tx in txs {
-            if is_system_transaction(tx, header.author()) {
-                actual_system_txs.push(tx);
-            }
-        }
-        if header.number() == 1 {
-            // skip first 7 init transaction
-            actual_system_txs = actual_system_txs[INIT_TX_NUM..].to_owned();
-        }
         if actual_system_txs.len() != expect_system_txs.len() {
             Err(EngineError::ParliaSystemTxMismatch)?
         }
