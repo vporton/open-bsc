@@ -80,6 +80,8 @@ Make sure that these binaries are in your `PATH`. After that, you should be able
 
 ### 2.2 Build from Source Code <a id="chapter-0022"></a>
 
+It was tested to work with Rust 1.47.0 (some other versions of Rust cause OpenEthereum crash!)
+
 ```bash
 # download OpenBsc code
 $ git clone https://github.com/binance-chain/open-bsc
