@@ -4,7 +4,7 @@
 	"engine": {
 		"parlia": {
 			"params": {
-				"period": 3,
+				"period": 2,
 				"epoch": 200
 			}
 		}
