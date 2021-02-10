@@ -457,7 +457,7 @@ impl NetworkProtocolHandler for SyncProtocolHandler {
                 .expect("Error registering peers timer");
             io.register_timer(MAINTAIN_SYNC_TIMER, Duration::from_millis(1100))
                 .expect("Error registering sync timer");
-            io.register_timer(CONTINUE_SYNC_TIMER, Duration::from_millis(2500))
+            io.register_timer(CONTINUE_SYNC_TIMER, Duration::from_millis(900)) // FIXME: for non-BSC should be 2500
                 .expect("Error registering sync timer");
             io.register_timer(TX_TIMER, Duration::from_millis(1300))
                 .expect("Error registering transactions timer");
