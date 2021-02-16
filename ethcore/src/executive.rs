@@ -1188,7 +1188,7 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
         }
 
         // TODO: we might need bigints here, or at least check overflows.
-        let balance = self.state.balance(&sender)?;
+        // let balance = self.state.balance(&sender)?;
         let gas_cost = t.gas.full_mul(t.gas_price);
         let total_cost = U512::from(t.value) + gas_cost;
 

@@ -29,14 +29,12 @@ use pod_account::*;
 use rlp::{encode, RlpStream};
 use std::{
     cell::{Cell, RefCell},
-    cell::{Cell, RefCell},    collections::{BTreeMap, HashMap},
+	collections::{BTreeMap, HashMap},
     fmt,
     sync::Arc,
 };
 use trie::{Recorder, Trie};
 use types::basic_account::BasicAccount;
-
-use std::cell::{Cell, RefCell};
 
 const STORAGE_CACHE_ITEMS: usize = 8192;
 

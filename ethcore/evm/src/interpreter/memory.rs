@@ -131,8 +131,6 @@ impl Memory for Vec<u8> {
 
 #[cfg(test)]
 mod tests {
-    use ethereum_types::U256;
-
     use super::Memory;
     use ethereum_types::U256;
 

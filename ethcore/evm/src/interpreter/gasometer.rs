@@ -18,14 +18,10 @@ use super::u256_to_address;
 use ethereum_types::{H256, U256};
 use std::cmp;
 
-use ethereum_types::{H256, U256};
-
 use evm;
 use instructions::{self, Instruction, InstructionInfo};
 use interpreter::stack::Stack;
 use vm::{self, Schedule};
-
-use super::u256_to_address;
 
 macro_rules! overflowing {
     ($x: expr) => {{

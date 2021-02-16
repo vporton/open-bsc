@@ -50,8 +50,6 @@ use spec::{seal::Generic as GenericSeal, Genesis};
 use state::{backend::Basic as BasicBackend, Backend, State, Substate};
 use trace::{NoopTracer, NoopVMTracer};
 
-pub use ethash::OptimizeFor;
-
 const MAX_TRANSACTION_SIZE: usize = 300 * 1024;
 
 // helper for formatting errors.
@@ -1090,7 +1088,6 @@ impl Spec {
 
 #[cfg(test)]
 mod tests {
-    use tempdir::TempDir;
     use super::*;
     use state::State;
     use tempdir::TempDir;

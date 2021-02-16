@@ -23,8 +23,6 @@ use heapsize::HeapSizeOf;
 use memory_cache::MemoryLruCache;
 use parking_lot::Mutex;
 
-use memory_cache::MemoryLruCache;
-
 use super::super::instructions::{self, Instruction};
 
 const DEFAULT_CACHE_SIZE: usize = 4 * 1024 * 1024;
@@ -134,8 +132,6 @@ impl Default for SharedCache {
 
 #[cfg(test)]
 mod test {
-    use hex_literal::hex;
-
     use super::*;
     use hex_literal::hex;
 

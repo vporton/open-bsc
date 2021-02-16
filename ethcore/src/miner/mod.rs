@@ -26,7 +26,6 @@ pub mod pool_client;
 pub mod stratum;
 
 pub use self::miner::{Author, AuthoringParams, Miner, MinerOptions, Penalization, PendingSet};
-use ethcore_miner::pool::{local_transactions, QueueStatus, VerifiedTransaction};
 
 
 use std::{

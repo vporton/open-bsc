@@ -16,14 +16,10 @@
 
 //! Evm factory.
 //!
-use std::sync::Arc;
-
 use super::{interpreter::SharedCache, vm::ActionParams, vmtype::VMType};
 use ethereum_types::U256;
 use std::sync::Arc;
 use vm::{Exec, Schedule};
-
-use super::{interpreter::SharedCache, vm::ActionParams, vmtype::VMType};
 
 /// Evm factory. Creates appropriate Evm.
 #[derive(Clone)]

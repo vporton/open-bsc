@@ -59,8 +59,6 @@ mod substate;
 
 pub mod backend;
 
-pub use self::{account::Account, backend::Backend, substate::Substate};
-
 /// Used to return information about an `State::apply` operation.
 pub struct ApplyOutcome<T, V> {
     /// The receipt for the applied transaction.
