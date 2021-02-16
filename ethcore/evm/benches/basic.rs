@@ -16,6 +16,7 @@
 
 //! benchmarking for EVM
 
+extern crate bit_set;
 #[macro_use]
 extern crate criterion;
 extern crate bit_set;
@@ -29,8 +30,12 @@ extern crate parking_lot;
 extern crate rustc_hex;
 extern crate vm;
 
+use std::{str::FromStr, sync::Arc};
+
 use criterion::{black_box, Bencher, Criterion};
 use ethereum_types::{Address, U256};
+use rustc_hex::FromHex;
+
 use evm::Factory;
 use rustc_hex::FromHex;
 use std::{str::FromStr, sync::Arc};

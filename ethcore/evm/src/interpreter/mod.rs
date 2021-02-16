@@ -23,12 +23,14 @@ mod memory;
 mod shared_cache;
 mod stack;
 
-use bytes::Bytes;
+use std::{cmp, marker::PhantomData, mem, sync::Arc};use bytes::Bytes;
 use ethereum_types::{Address, H256, U256};
 use hash::keccak;
 use num_bigint::BigUint;
 use std::{cmp, marker::PhantomData, mem, sync::Arc};
 
+use evm::CostType;
+use instructions::{self, Instruction, InstructionInfo};
 use vm::{
     self, ActionParams, ActionValue, CallType, ContractCreateResult, CreateContractAddress,
     GasLeft, MessageCallResult, ParamsType, ReturnData, Schedule, TrapError, TrapKind,
@@ -1511,6 +1513,10 @@ fn address_to_u256(value: Address) -> U256 {
 
 #[cfg(test)]
 mod tests {
+    use std::sync::Arc;
+
+    use rustc_hex::FromHex;
+
     use factory::Factory;
     use rustc_hex::FromHex;
     use std::sync::Arc;

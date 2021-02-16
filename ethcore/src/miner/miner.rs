@@ -32,6 +32,8 @@ use ethcore_miner::{
     pool::{self, PrioritizationStrategy, QueueStatus, TransactionQueue, VerifiedTransaction},
     service_transaction_checker::ServiceTransactionChecker,
 };
+use executed::ExecutionError;
+use executive::contract_address;
 use ethereum_types::{Address, H256, U256};
 use io::IoChannel;
 use miner::{
@@ -1501,7 +1503,7 @@ mod tests {
     use client::{ChainInfo, EachBlockWith, ImportSealedBlock, TestBlockChainClient};
     use miner::{MinerService, PendingOrdering};
     use test_helpers::{generate_dummy_client, generate_dummy_client_with_spec};
-    use types::transaction::Transaction;
+    use types::{transaction::Transaction, BlockNumber};
 
     #[test]
     fn should_prepare_block_to_seal() {

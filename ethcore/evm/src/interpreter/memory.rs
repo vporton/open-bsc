@@ -15,6 +15,7 @@
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
 use ethereum_types::U256;
+
 use vm::ReturnData;
 
 const MAX_RETURN_WASTE_BYTES: usize = 16384;
@@ -130,6 +131,8 @@ impl Memory for Vec<u8> {
 
 #[cfg(test)]
 mod tests {
+    use ethereum_types::U256;
+
     use super::Memory;
     use ethereum_types::U256;
 

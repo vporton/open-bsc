@@ -18,6 +18,8 @@
 
 #![warn(missing_docs)]
 
+pub use self::db::*;
+
 mod db;
 
 pub mod cache_manager;

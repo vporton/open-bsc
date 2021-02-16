@@ -26,7 +26,8 @@ pub mod pool_client;
 pub mod stratum;
 
 pub use self::miner::{Author, AuthoringParams, Miner, MinerOptions, Penalization, PendingSet};
-pub use ethcore_miner::{local_accounts::LocalAccounts, pool::PendingOrdering};
+use ethcore_miner::pool::{local_transactions, QueueStatus, VerifiedTransaction};
+
 
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -51,6 +52,7 @@ use client::{
     ScheduleInfo, SealedBlockImporter,
 };
 use error::Error;
+pub use ethcore_miner::{local_accounts::LocalAccounts, pool::PendingOrdering};
 use state::StateInfo;
 
 /// Provides methods to verify incoming external transactions

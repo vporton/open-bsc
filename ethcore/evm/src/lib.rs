@@ -26,6 +26,13 @@ extern crate parity_bytes as bytes;
 extern crate parking_lot;
 extern crate vm;
 
+pub use self::{
+    evm::{CostType, FinalizationResult, Finalize},
+    factory::Factory,
+    instructions::{Instruction, InstructionInfo},
+    vmtype::VMType,
+};
+
 #[macro_use]
 extern crate lazy_static;
 

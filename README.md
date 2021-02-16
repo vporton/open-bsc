@@ -85,7 +85,9 @@ Once you have `rustup` installed, then you need to install:
 
 Make sure that these binaries are in your `PATH`. After that, you should be able to build OpenEthereum from source.
 
-### 3.2 Build from Source Code <a id="chapter-0032"></a>
+### 2.2 Build from Source Code <a id="chapter-0022"></a>
+
+It was tested to work with Rust 1.47.0 (some other versions of Rust cause OpenEthereum crash!)
 
 ```bash
 # download OpenEthereum code

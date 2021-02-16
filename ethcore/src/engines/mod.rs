@@ -15,7 +15,7 @@
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Consensus engine specification and basic implementations.
-
+#![allow(missing_docs)]
 mod authority_round;
 mod basic_authority;
 mod clique;
@@ -24,6 +24,7 @@ mod null_engine;
 mod validator_set;
 
 pub mod block_reward;
+pub mod parlia;
 pub mod signer;
 
 pub use self::{
@@ -62,7 +63,9 @@ use block::ExecutedBlock;
 use bytes::Bytes;
 use ethereum_types::{Address, H256, H64, U256};
 use ethkey::Signature;
+use kvdb::KeyValueDB;
 use machine::{self, AuxiliaryData, AuxiliaryRequest, Machine};
+use std::str::FromStr;
 use types::ancestry_action::AncestryAction;
 use unexpected::{Mismatch, OutOfBounds};
 
@@ -71,6 +74,12 @@ use unexpected::{Mismatch, OutOfBounds};
 pub const DEFAULT_BLOCKHASH_CONTRACT: &'static str = "73fffffffffffffffffffffffffffffffffffffffe33141561006a5760014303600035610100820755610100810715156100455760003561010061010083050761010001555b6201000081071515610064576000356101006201000083050761020001555b5061013e565b4360003512151561008457600060405260206040f361013d565b61010060003543031315156100a857610100600035075460605260206060f361013c565b6101006000350715156100c55762010000600035430313156100c8565b60005b156100ea576101006101006000350507610100015460805260206080f361013b565b620100006000350715156101095763010000006000354303131561010c565b60005b1561012f57610100620100006000350507610200015460a052602060a0f361013a565b600060c052602060c0f35b5b5b5b5b";
 /// The number of generations back that uncles can be.
 pub const MAX_UNCLE_AGE: usize = 6;
+
+lazy_static! {
+    /// System acocunt address
+    pub static ref SYSTEM_ACCOUNT: Address =
+        Address::from_str("ffffFFFfFFffffffffffffffFfFFFfffFFFfFFfE").unwrap();
+}
 
 /// Voting errors.
 #[derive(Debug)]
@@ -115,6 +124,31 @@ pub enum EngineError {
     CliqueInvalidNonce(H64),
     /// The signer signed a block to recently
     CliqueTooRecentlySigned(Address),
+    /// Missing signature
+    ParliaMissingSignature,
+    /// Missing vanity data
+    ParliaMissingVanity,
+    /// The extra of header is invalid
+    ParliaInvalidValidatorsExtra,
+    /// List of signers is invalid
+    ParliaCheckpointInvalidValidators(usize),
+    /// Missing validator bytes on epoch block header
+    ParliaCheckpointMismatchValidators,
+    /// Header is not continuous
+    ParliaUnContinuousHeader,
+    /// ParliaUnauthorizedValidator is returned if a header is signed by a non-authorized entity.
+    ParliaUnauthorizedValidator,
+    /// ParliaRecentlySigned is returned if a header is signed by an authorized entity
+    /// that already signed a header recently, thus is temporarily not allowed to.
+    ParliaRecentlySigned,
+    /// The signer of header is different from author
+    ParliaAuthorMismatch,
+    /// The validator bytes is not match with state
+    ParliaInvalidValidatorBytes,
+    /// System tx mismatch
+    ParliaSystemTxMismatch,
+    /// validator seal block too early
+    ParliaFutureBlock,
     /// Custom
     Custom(String),
 }
@@ -131,7 +165,27 @@ impl fmt::Display for EngineError {
 															it needs to be bigger than zero and a divisible by 20",
                 len
             ),
+            ParliaMissingSignature => format!("Extra data is missing signature"),
+            ParliaCheckpointInvalidValidators(len) => format!(
+                "Checkpoint block list was of length: {} of checkpoint but
+															it needs to be bigger than zero and a divisible by 20",
+                len
+            ),
+            ParliaUnContinuousHeader => format!("Can not find parent header"),
+            ParliaUnauthorizedValidator => format!("Unauthorized validator"),
+            ParliaRecentlySigned => format!("Invalid ValidatorBytes"),
+            ParliaInvalidValidatorBytes => format!("Validator recent signed"),
+
+            ParliaMissingVanity => format!("Missing vanity"),
+            ParliaInvalidValidatorsExtra => format!("Invalid Validators Extra"),
+            ParliaCheckpointMismatchValidators => format!("Checkpoint mismatch validators"),
+
+            ParliaAuthorMismatch => format!("Author mismatch"),
+            ParliaSystemTxMismatch => format!("SystemTx mismatch"),
+            ParliaFutureBlock => format!("Receiving future block"),
+
             CliqueCheckpointNoSigner => format!("Checkpoint block list of signers was empty"),
+
             CliqueInvalidNonce(ref mis) => format!(
                 "Unexpected nonce {} expected {} or {}",
                 mis,
@@ -458,6 +512,9 @@ pub trait Engine<M: Machine>: Sync + Send {
 
     /// Add Client which can be used for sealing, potentially querying the state and sending messages.
     fn register_client(&self, _client: Weak<M::EngineClient>) {}
+
+    /// Add db if needed. Only for parlia so far.
+    fn register_db(&self, _db: Arc<dyn KeyValueDB>) {}
 
     /// Trigger next step of the consensus engine.
     fn step(&self) {}

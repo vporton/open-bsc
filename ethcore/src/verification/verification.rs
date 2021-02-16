@@ -288,12 +288,21 @@ fn verify_uncles(
 /// Phase 4 verification. Check block information against transaction enactment results,
 pub fn verify_block_final(expected: &Header, got: &Header) -> Result<(), Error> {
     if expected.state_root() != got.state_root() {
+        println!("unexpected header  {:?}", expected.number());
+        println!("{:?}", expected.state_root());
+        println!("{:?}", got.state_root());
         return Err(From::from(BlockError::InvalidStateRoot(Mismatch {
             expected: *expected.state_root(),
             found: *got.state_root(),
         })));
     }
     if expected.gas_used() != got.gas_used() {
+        println!(
+            "====== debug height {:?} expected{:?}, get {:?}",
+            expected.number(),
+            expected.gas_used(),
+            got.gas_used()
+        );
         return Err(From::from(BlockError::InvalidGasUsed(Mismatch {
             expected: *expected.gas_used(),
             found: *got.gas_used(),

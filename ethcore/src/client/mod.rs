@@ -27,6 +27,8 @@ mod io_message;
 pub mod test_client;
 mod trace;
 
+pub use state::StateInfo;
+
 #[cfg(any(test, feature = "test-helpers"))]
 pub use self::evm_test_client::{EvmTestClient, EvmTestError, TransactErr, TransactSuccess};
 #[cfg(any(test, feature = "test-helpers"))]

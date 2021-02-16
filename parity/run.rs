@@ -347,7 +347,7 @@ pub fn execute(cmd: RunCmd, logger: Arc<RotatingLogger>) -> Result<RunningClient
     let client_db = restoration_db_handler
         .open(&client_path)
         .map_err(|e| format!("Failed to open database {:?}", e))?;
-
+    spec.engine.register_db(Arc::clone(client_db.key_value()));
     // create client service.
     let service = ClientService::start(
         client_config,

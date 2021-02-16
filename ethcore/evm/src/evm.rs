@@ -16,6 +16,8 @@
 
 //! Evm interface.
 
+use std::{cmp, fmt, ops};
+
 use ethereum_types::{U128, U256, U512};
 use std::{cmp, fmt, ops};
 use vm::{Error, Ext, GasLeft, Result, ReturnData};
@@ -172,6 +174,8 @@ impl CostType for usize {
 
 #[cfg(test)]
 mod tests {
+    use ethereum_types::U256;
+
     use super::CostType;
     use ethereum_types::U256;
 

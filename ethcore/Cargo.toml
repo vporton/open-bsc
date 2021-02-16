@@ -21,6 +21,8 @@ ethash = { path = "../ethash" }
 ethcore-blockchain = { path = "./blockchain" }
 ethcore-bloom-journal = { path = "../util/bloom" }
 ethcore-builtin = { path = "./builtin" }
+tendermint = { path = "./tendermint" }
+tendermint-proto = {path = "./proto"}
 ethcore-call-contract = { path = "./call-contract" }
 ethcore-db = { path = "./db" }
 ethcore-io = { path = "../util/io" }
@@ -33,6 +35,7 @@ evm = { path = "evm" }
 globset = "0.4"
 hash-db = "0.11.0"
 heapsize = "0.4"
+hex = "0.3.1"
 itertools = "0.5"
 journaldb = { path = "../util/journaldb" }
 keccak-hash = "0.1"

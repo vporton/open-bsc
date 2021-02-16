@@ -298,6 +298,7 @@ impl<'a> EvmTestClient<'a> {
             &transaction,
             tracer,
             vm_tracer,
+            false,
         );
         let scheme = self
             .spec

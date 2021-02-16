@@ -26,6 +26,7 @@ use std::{
 
 use bytes::Bytes;
 use ethereum_types::{Address, Bloom, H256, U256};
+pub use ethash::OptimizeFor;
 use ethjson;
 use hash::{keccak, KECCAK_NULL_RLP};
 use parking_lot::RwLock;
@@ -36,8 +37,8 @@ use vm::{ActionParams, ActionValue, CallType, EnvInfo, ParamsType};
 
 use builtin::Builtin;
 use engines::{
-    AuthorityRound, BasicAuthority, Clique, EthEngine, InstantSeal, InstantSealParams, NullEngine,
-    DEFAULT_BLOCKHASH_CONTRACT,
+    parlia::Parlia, AuthorityRound, BasicAuthority, Clique, EthEngine, InstantSeal,
+    InstantSealParams, NullEngine, DEFAULT_BLOCKHASH_CONTRACT,
 };
 use error::Error;
 use executive::Executive;
@@ -645,7 +646,7 @@ impl Spec {
         if params.network_id == 0x4 {
             hard_forks.insert(1);
         }
-
+        let chain_id = params.chain_id.clone();
         let machine = Self::machine(&engine_spec, params, builtins);
 
         let engine: Arc<dyn EthEngine> = match engine_spec {
@@ -691,6 +692,10 @@ impl Spec {
             ethjson::spec::Engine::AuthorityRound(authority_round) => {
                 AuthorityRound::new(authority_round.params.into(), machine)
                     .expect("Failed to start AuthorityRound consensus engine.")
+            }
+            ethjson::spec::Engine::Parlia(parlia) => {
+                Parlia::new(parlia.params.into(), machine, chain_id)
+                    .expect("Failed to start parlia consensus engine.")
             }
         };
 
@@ -1085,6 +1090,7 @@ impl Spec {
 
 #[cfg(test)]
 mod tests {
+    use tempdir::TempDir;
     use super::*;
     use state::State;
     use tempdir::TempDir;
