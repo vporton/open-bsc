@@ -24,7 +24,6 @@ use heapsize::HeapSizeOf;
 use kvdb::PREFIX_LEN as DB_PREFIX_LEN;
 use rlp;
 
-use common_types::{engines::epoch::Transition as EpochTransition, receipt::Receipt, BlockNumber};
 use rlp_derive::{RlpDecodable, RlpDecodableWrapper, RlpEncodable, RlpEncodableWrapper};
 
 use crate::db::Key;

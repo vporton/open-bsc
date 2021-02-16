@@ -16,8 +16,6 @@
 
 //! Database utilities and definitions.
 
-use std::{collections::HashMap, hash::Hash, ops::Deref};
-
 use kvdb::{DBTransaction, KeyValueDB};
 use parking_lot::RwLock;
 use std::{collections::HashMap, hash::Hash, ops::Deref};
