@@ -1218,8 +1218,6 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
             });
         }
 
-        let mut substate = Substate::new();
-
         // NOTE: there can be no invalid transactions from this point.
         if !schedule.keep_unsigned_nonce || !t.is_unsigned() {
             self.state.inc_nonce(&sender)?;
