@@ -60,6 +60,8 @@ use client::{
 };
 use engines::{EngineSigner, EthEngine, Seal};
 use error::{Error, ErrorKind};
+use executed::ExecutionError;
+use executive::contract_address;
 use spec::Spec;
 use state::State;
 
@@ -1496,11 +1498,12 @@ mod tests {
     use ethkey::{Generator, Random};
     use hash::keccak;
     use rustc_hex::FromHex;
+    use types::BlockNumber;
 
     use client::{ChainInfo, EachBlockWith, ImportSealedBlock, TestBlockChainClient};
     use miner::{MinerService, PendingOrdering};
     use test_helpers::{generate_dummy_client, generate_dummy_client_with_spec};
-    use types::{transaction::Transaction, BlockNumber};
+    use types::transaction::Transaction;
 
     #[test]
     fn should_prepare_block_to_seal() {

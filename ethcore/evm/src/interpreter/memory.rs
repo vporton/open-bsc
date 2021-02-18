@@ -15,7 +15,6 @@
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
 use ethereum_types::U256;
-
 use vm::ReturnData;
 
 const MAX_RETURN_WASTE_BYTES: usize = 16384;

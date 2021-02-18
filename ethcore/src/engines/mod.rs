@@ -15,7 +15,7 @@
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Consensus engine specification and basic implementations.
-#![allow(missing_docs)]
+
 mod authority_round;
 mod basic_authority;
 mod clique;
@@ -185,7 +185,6 @@ impl fmt::Display for EngineError {
             ParliaFutureBlock => format!("Receiving future block"),
 
             CliqueCheckpointNoSigner => format!("Checkpoint block list of signers was empty"),
-
             CliqueInvalidNonce(ref mis) => format!(
                 "Unexpected nonce {} expected {} or {}",
                 mis,

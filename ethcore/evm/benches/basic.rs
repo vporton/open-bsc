@@ -31,7 +31,6 @@ extern crate vm;
 
 use criterion::{black_box, Bencher, Criterion};
 use ethereum_types::{Address, U256};
-
 use evm::Factory;
 use rustc_hex::FromHex;
 use std::{str::FromStr, sync::Arc};

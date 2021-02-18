@@ -14,8 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
-
+use super::interpreter::MAX_SUB_STACK_SIZE;
 use ethereum_types::{Address, H256, U256};
+use factory::Factory;
 use hex_literal::hex;
 use rustc_hex::FromHex;
 

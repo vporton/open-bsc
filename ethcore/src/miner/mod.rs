@@ -26,7 +26,7 @@ pub mod pool_client;
 pub mod stratum;
 
 pub use self::miner::{Author, AuthoringParams, Miner, MinerOptions, Penalization, PendingSet};
-
+pub use ethcore_miner::{local_accounts::LocalAccounts, pool::PendingOrdering};
 
 use std::{
     collections::{BTreeMap, BTreeSet},

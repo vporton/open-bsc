@@ -27,6 +27,7 @@ use parking_lot::Mutex;
 use types::transaction::{Action, Transaction};
 
 use ethkey::Secret;
+use rustc_hex::ToHex;
 use serde_json::to_value;
 use v1::{
     helpers::{

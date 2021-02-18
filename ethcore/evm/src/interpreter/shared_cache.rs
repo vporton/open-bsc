@@ -14,16 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with OpenEthereum.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::sync::Arc;
-
+use super::super::instructions::{self, Instruction};
 use bit_set::BitSet;
 use ethereum_types::H256;
 use hash::KECCAK_EMPTY;
 use heapsize::HeapSizeOf;
 use memory_cache::MemoryLruCache;
 use parking_lot::Mutex;
-
-use super::super::instructions::{self, Instruction};
+use std::sync::Arc;
 
 const DEFAULT_CACHE_SIZE: usize = 4 * 1024 * 1024;
 

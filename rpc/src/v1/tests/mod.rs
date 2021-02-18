@@ -28,7 +28,6 @@ pub mod helpers;
 //     `extract_chain!("Folder/File", "with_name")` will load Folder/File.json and
 //     extract the chain with that name. This will panic if no chain by that name
 //     is found.
-#[allow(unused)]
 macro_rules! extract_chain {
 	(iter $file:expr) => {{
 		const RAW_DATA: &'static [u8] =
@@ -41,7 +40,6 @@ macro_rules! extract_chain {
 	}};
 }
 
-#[allow(unused)]
 macro_rules! register_test {
 	($name:ident, $cb:expr, $file:expr) => {
 		#[test]

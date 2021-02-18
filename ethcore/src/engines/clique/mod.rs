@@ -157,7 +157,7 @@ impl VoteType {
 
 /// Clique Engine implementation
 // block_state_by_hash -> block state indexed by header hash.
-// #[cfg(not(test))]
+#[cfg(not(test))]
 pub struct Clique {
     epoch_length: u64,
     period: u64,
@@ -168,17 +168,17 @@ pub struct Clique {
     signer: RwLock<Option<Box<dyn EngineSigner>>>,
 }
 
-// #[cfg(test)]
-// /// Test version of `CliqueEngine` to make all fields public
-// pub struct Clique {
-//     pub epoch_length: u64,
-//     pub period: u64,
-//     pub machine: EthereumMachine,
-//     pub client: RwLock<Option<Weak<dyn EngineClient>>>,
-//     pub block_state_by_hash: RwLock<LruCache<H256, CliqueBlockState>>,
-//     pub proposals: RwLock<HashMap<Address, VoteType>>,
-//     pub signer: RwLock<Option<Box<dyn EngineSigner>>>,
-// }
+#[cfg(test)]
+/// Test version of `CliqueEngine` to make all fields public
+pub struct Clique {
+    pub epoch_length: u64,
+    pub period: u64,
+    pub machine: EthereumMachine,
+    pub client: RwLock<Option<Weak<dyn EngineClient>>>,
+    pub block_state_by_hash: RwLock<LruCache<H256, CliqueBlockState>>,
+    pub proposals: RwLock<HashMap<Address, VoteType>>,
+    pub signer: RwLock<Option<Box<dyn EngineSigner>>>,
+}
 
 impl Clique {
     /// Initialize Clique engine from empty state.
