@@ -68,8 +68,8 @@ pub fn is_to_system_contract(addr: &Address) -> bool {
 
 /// whether the transaction is system or not
 pub fn is_system_transaction(tx: &SignedTransaction, author: &Address) -> bool {
-    if let Action::Call(to) = tx.action {
-        tx.sender().eq(author) && is_to_system_contract(&to) && tx.gas_price == 0.into()
+    if let Action::Call(to) = tx.tx().action {
+        tx.sender().eq(author) && is_to_system_contract(&to) && tx.tx().gas_price == 0.into()
     } else {
         false
     }

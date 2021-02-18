@@ -506,6 +506,9 @@ dependencies = [
  "rlp 0.3.0",
  "rlp_derive",
  "rustc-hex 1.0.0",
+ "serde",
+ "serde_json",
+ "serde_repr",
  "unexpected",
 ]
 
@@ -1268,6 +1271,7 @@ dependencies = [
  "num",
  "parity-bytes",
  "parity-crypto 0.4.2",
+ "rustc-hex 1.0.0",
  "tendermint",
 ]
 
@@ -1629,7 +1633,6 @@ dependencies = [
 name = "ethstore"
 version = "0.2.1"
 dependencies = [
- "dir",
  "ethereum-types 0.4.2",
  "ethkey",
  "itertools 0.5.10",
@@ -1648,7 +1651,6 @@ dependencies = [
  "smallvec 0.6.13",
  "tempdir",
  "time",
- "tiny-keccak 1.5.0",
 ]
 
 [[package]]
@@ -1674,6 +1676,7 @@ version = "0.1.0"
 dependencies = [
  "bit-set",
  "criterion 0.2.11",
+ "ethcore-builtin",
  "ethereum-types 0.4.2",
  "heapsize",
  "hex-literal",
@@ -2767,9 +2770,9 @@ dependencies = [
 
 [[package]]
 name = "linked-hash-map"
-version = "0.5.2"
+version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ae91b68aebc4ddb91978b11a1b02ddd8602a05ec19002801c5666000e05e0f83"
+checksum = "8dd5a6d5999d9907cda8ed67bbd137d3af8085216c2ac62de5be860bd41f304a"
 
 [[package]]
 name = "local-encoding"
@@ -3208,7 +3211,7 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
 name = "openethereum"
-version = "3.1.0"
+version = "3.1.1"
 dependencies = [
  "ansi_term 0.10.2",
  "atty",
@@ -3573,7 +3576,7 @@ dependencies = [
 
 [[package]]
 name = "parity-version"
-version = "3.1.0"
+version = "3.1.1"
 dependencies = [
  "parity-bytes",
  "rlp 0.3.0",

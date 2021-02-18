@@ -229,7 +229,7 @@ impl Engine<EthereumMachine> for Parlia {
             actual_system_txs = actual_system_txs[INIT_TX_NUM..].to_owned();
         }
         for tx in actual_system_txs.iter() {
-            if tx.action == Action::Call(util::SYSTEM_REWARD_CONTRACT.clone()) {
+            if tx.tx().action == Action::Call(util::SYSTEM_REWARD_CONTRACT.clone()) {
                 have_sys_reward = true;
             }
         }
@@ -261,10 +261,10 @@ impl Engine<EthereumMachine> for Parlia {
             let tx = txs.get(i).unwrap();
             let r = _block.receipts.get(i).unwrap();
             if i == 0 {
-                reward = reward.add(tx.gas_price.mul(r.gas_used));
+                reward = reward.add(tx.tx().gas_price.mul(r.gas_used));
             } else {
                 let last_used = _block.receipts.get(i - 1).unwrap().gas_used;
-                reward = reward.add(tx.gas_price.mul(r.gas_used - last_used));
+                reward = reward.add(tx.tx().gas_price.mul(r.gas_used - last_used));
             }
         }
         if reward > 0.into() {
@@ -307,11 +307,11 @@ impl Engine<EthereumMachine> for Parlia {
         for i in 0..system_tx_num {
             let expect_tx = expect_system_txs.get(i).unwrap();
             let system_tx = actual_system_txs.get(i).unwrap();
-            if system_tx.gas != expect_tx.gas
-                || system_tx.gas_price != expect_tx.gas_price
-                || system_tx.value != expect_tx.value
-                || system_tx.data != expect_tx.data
-                || system_tx.action != expect_tx.action
+            if system_tx.tx().gas != expect_tx.gas
+                || system_tx.tx().gas_price != expect_tx.gas_price
+                || system_tx.tx().value != expect_tx.value
+                || system_tx.tx().data != expect_tx.data
+                || system_tx.tx().action != expect_tx.action
             {
                 Err(EngineError::ParliaSystemTxMismatch)?
             }
