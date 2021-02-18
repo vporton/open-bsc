@@ -44,7 +44,6 @@ use types::{
 };
 use vm::EnvInfo;
 
-pub use self::{account::Account, backend::Backend, substate::Substate};
 use bytes::Bytes;
 use ethereum_types::{Address, H256, U256};
 use hash_db::{AsHashDB, HashDB};

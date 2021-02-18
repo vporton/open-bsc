@@ -20,8 +20,6 @@ use factory::Factory;
 use hex_literal::hex;
 use rustc_hex::FromHex;
 
-use factory::Factory;
-
 use std::{
     collections::{HashMap, HashSet},
     fmt::Debug,
@@ -35,8 +33,6 @@ use vm::{
     ActionParams, ActionValue, Ext,
 };
 use vmtype::VMType;
-
-use super::interpreter::MAX_SUB_STACK_SIZE;
 
 evm_test! {test_add: test_add_int}
 fn test_add(factory: super::Factory) {

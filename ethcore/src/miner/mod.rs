@@ -51,7 +51,6 @@ use client::{
     ScheduleInfo, SealedBlockImporter,
 };
 use error::Error;
-pub use ethcore_miner::{local_accounts::LocalAccounts, pool::PendingOrdering};
 use state::StateInfo;
 
 /// Provides methods to verify incoming external transactions

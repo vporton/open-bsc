@@ -32,8 +32,6 @@ use ethcore_miner::{
     pool::{self, PrioritizationStrategy, QueueStatus, TransactionQueue, VerifiedTransaction},
     service_transaction_checker::ServiceTransactionChecker,
 };
-use executed::ExecutionError;
-use executive::contract_address;
 use ethereum_types::{Address, H256, U256};
 use io::IoChannel;
 use miner::{

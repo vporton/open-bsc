@@ -26,7 +26,6 @@ use std::{
 
 use bytes::Bytes;
 use ethereum_types::{Address, Bloom, H256, U256};
-pub use ethash::OptimizeFor;
 use ethjson;
 use hash::{keccak, KECCAK_NULL_RLP};
 use parking_lot::RwLock;

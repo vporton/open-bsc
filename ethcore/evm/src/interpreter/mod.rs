@@ -23,15 +23,12 @@ mod memory;
 mod shared_cache;
 mod stack;
 
-use std::{cmp, marker::PhantomData, mem, sync::Arc};
 use bytes::Bytes;
 use ethereum_types::{Address, H256, U256};
 use hash::keccak;
 use num_bigint::BigUint;
 use std::{cmp, marker::PhantomData, mem, sync::Arc};
 
-use evm::CostType;
-use instructions::{self, Instruction, InstructionInfo};
 use vm::{
     self, ActionParams, ActionValue, CallType, ContractCreateResult, CreateContractAddress,
     GasLeft, MessageCallResult, ParamsType, ReturnData, Schedule, TrapError, TrapKind,
