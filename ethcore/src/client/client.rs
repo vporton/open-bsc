@@ -497,16 +497,20 @@ impl Importer {
             locked_block.strip_receipts_outcomes();
         }
 
-		// FIXME: CRUDE bug workaround
-		if client.config.spec_name != "bsc" /* && (expected.number() == 4530402 || expected.number() == 4532495) */ {
-			// t_nb 7.7 Final Verification. See if block that we created (executed) matches exactly with block that we received.
-			if let Err(e) = self
-				.verifier.verify_block_final(&header, &locked_block.header)
-			{
-				warn!(target: "client", "Stage 5 block verification failed for #{} ({})\nError: {:?}", header.number(), header.hash(), e);
-				bail!(e);
-			}
-		}
+        // FIXME: CRUDE bug workaround
+        println!("NAME: {}", client.config.spec_name);
+        if client.config.spec_name != "BSC"
+        /* && (expected.number() == 4530402 || expected.number() == 4532495) */
+        {
+            // t_nb 7.7 Final Verification. See if block that we created (executed) matches exactly with block that we received.
+            if let Err(e) = self
+                .verifier
+                .verify_block_final(&header, &locked_block.header)
+            {
+                warn!(target: "client", "Stage 5 block verification failed for #{} ({})\nError: {:?}", header.number(), header.hash(), e);
+                bail!(e);
+            }
+        }
 
         let pending = self.check_epoch_end_signal(
             &header,

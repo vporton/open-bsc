@@ -1160,7 +1160,8 @@ impl<'a, B: 'a + StateBackend> Executive<'a, B> {
         let nonce = self.state.nonce(&sender)?;
 
         let schedule = self.schedule;
-        let mut base_gas_required = if parlia_engine && is_system_transaction(&t, &self.info.author) {
+        let mut base_gas_required = if parlia_engine && is_system_transaction(&t, &self.info.author)
+        {
             U256::from(0)
         } else {
             U256::from(t.tx().gas_required(&schedule))
