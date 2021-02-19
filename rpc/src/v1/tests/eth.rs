@@ -57,7 +57,6 @@ fn sync_provider() -> Arc<TestSyncProvider> {
     }))
 }
 
-
 fn miner_service(spec: &Spec) -> Arc<Miner> {
     Arc::new(Miner::new_for_tests(spec, None))
 }
@@ -83,14 +82,14 @@ struct EthTester {
     _runtime: Runtime,
     _snapshot: Arc<TestSnapshotService>,
     accounts: Arc<AccountProvider>,
-	#[allow(unused)]
-	client: Arc<Client>,
+    #[allow(unused)]
+    client: Arc<Client>,
     handler: IoHandler<Metadata>,
 }
 
 impl EthTester {
-	#[allow(unused)]
-	fn from_chain(chain: &BlockChain) -> Self {
+    #[allow(unused)]
+    fn from_chain(chain: &BlockChain) -> Self {
         let tester = if ::ethjson::blockchain::Engine::NoProof == chain.engine {
             let mut config = ClientConfig::default();
             config.verifier_type = VerifierType::CanonNoSeal;
